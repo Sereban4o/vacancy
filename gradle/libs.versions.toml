@@ -15,6 +15,7 @@ coroutines = "1.7.3"
 koinAndroid = "3.3.0"
 retrofit = "2.9.0"
 converterGson = "2.9.0"
+coil = "2.6.0"
 
 detekt = "1.23.3"
 detektTwitterComposeRules ="0.0.26"
@@ -37,6 +38,9 @@ staticAnalysis-detektTwitterComposeRules = { module = "com.twitter.compose.rules
 
 # --- ДОБАВЛЕНО: Kotlin BOM ---
 kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin" }
+
+# --- ДОБАВЛЕНО: coil ---
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
 # AndroidX
 androidX-core = "androidx.core:core-ktx:1.12.0"

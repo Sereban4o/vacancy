@@ -58,6 +58,9 @@ dependencies {
     // Material3 для Compose
     implementation(libs.androidx.compose.material3)
 
+    // Coil — загрузка картинок в Compose
+    implementation(libs.coil.compose)
+
     // Activity + lifecycle integration
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
