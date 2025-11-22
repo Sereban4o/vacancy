@@ -2,7 +2,6 @@ package ru.practicum.android.diploma.ui.navigation
 
 import androidx.navigation.NavController
 import ru.practicum.android.diploma.util.Constants.Navigation.VACANCY_DETAILS_ROUTE
-import ru.practicum.android.diploma.util.Routes
 
 /**
  * Навигация на экран деталей вакансии.
