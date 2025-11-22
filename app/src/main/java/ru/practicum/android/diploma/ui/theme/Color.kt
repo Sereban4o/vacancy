@@ -17,7 +17,7 @@ val OnPrimaryLight: Color = Color(0xFFFFFFFF) // color_on_primary (light)
 val SecondaryLight: Color = Color(0xFF03DAC5) // color_secondary (light)
 val OnSecondaryLight: Color = Color(0xFF000000) // color_on_secondary (light)
 
-val BackgroundLight: Color = Color(0xFFFFFFFF) // = white / bottom_nav_background (light)
+val BackgroundLight: Color = Color(0xFFFDFDFD) // = white / bottom_nav_background (light)
 val OnBackgroundLight: Color = Color(0xFF000000)
 
 val SurfaceLight: Color = Color(0xFFFFFFFF)
@@ -30,7 +30,7 @@ val OnPrimaryDark: Color = Color(0xFF000000) // color_on_primary (night)
 val SecondaryDark: Color = Color(0xFF03DAC5) // color_secondary (night)
 val OnSecondaryDark: Color = Color(0xFFFFFFFF) // color_on_secondary (night)
 
-val BackgroundDark: Color = Color(0xFF121212) // = bottom_nav_background (night)
+val BackgroundDark: Color = Color(0xFF1A1B22) // = bottom_nav_background (night)
 val OnBackgroundDark: Color = Color(0xFFFFFFFF)
 
 val SurfaceDark: Color = Color(0xFF1E1E1E)
@@ -39,6 +39,7 @@ val OnSurfaceDark: Color = Color(0xFFFFFFFF)
 // ------- Error -------
 val ErrorColor: Color = Color(0xFFB00020)
 val OnErrorColor: Color = Color(0xFFFFFFFF)
+
 
 // -----------------------------
 // АЛИАСЫ ДЛЯ СОВМЕСТИМОСТИ (старый код)

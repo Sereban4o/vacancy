@@ -30,4 +30,4 @@ val TextLetterSpacingSmall = 0.5.sp
 val TextLetterSpacingMedium = 0.5.sp
 val TextLetterSpacingLarge = 0.sp
 
-val PaddingScreenTitleVertical = 19.dp
+val PaddingScreenTitleVertical = 20.dp

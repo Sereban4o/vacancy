@@ -1,8 +1,10 @@
 package ru.practicum.android.diploma.ui.root
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,7 +17,6 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.BottomAppBar
@@ -40,7 +41,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.navigation.NavGraph
@@ -51,7 +51,7 @@ class RootActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        enableEdgeToEdge()
         setContent {
             AppTheme {
                 Root()
@@ -68,27 +68,25 @@ class RootActivity : AppCompatActivity() {
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Root() {
     val navController = rememberNavController()
     val topPadding = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-    val bottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
 
     Column(
         Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(top = topPadding, bottom = bottomPadding)
+            .padding(top = topPadding)
     ) {
         Scaffold(
             bottomBar = {
                 BottomNavigationBar(navController)
             }
-        ) { innerPadding ->
+        ) {
             NavGraph(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .padding(horizontal = 16.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
                 navHostController = navController
             )
         }
@@ -107,7 +105,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                 .height(1.dp)
                 .background(colorResource(R.color.divider))
         )
-        BottomAppBar(containerColor = colorResource(R.color.container)) {
+        BottomAppBar(containerColor = MaterialTheme.colorScheme.background) {
             Row(
                 horizontalArrangement = Arrangement.SpaceAround,
                 modifier = Modifier.fillMaxWidth()
