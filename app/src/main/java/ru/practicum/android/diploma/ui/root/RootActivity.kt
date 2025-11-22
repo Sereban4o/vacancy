@@ -1,8 +1,8 @@
 package ru.practicum.android.diploma.ui.root
 
 import android.os.Bundle
+
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.navigation.NavGraph
@@ -50,17 +51,13 @@ class RootActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Включаем edge-to-edge
-//        enableEdgeToEdge()
 
-        // Весь UI теперь через Compose
         setContent {
             AppTheme {
                 Root()
             }
         }
 
-        // В будущем здесь будет реальная инициализация сети / DI / репозиториев
         networkRequestExample()
     }
 
@@ -171,9 +168,11 @@ fun BottomNavigationItem(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    val color =
-        if (selected) colorResource(R.color.activeMenu)
-        else colorResource(R.color.inActiveMenu)
+    val color = if (selected) {
+        colorResource(R.color.activeMenu)
+    } else {
+        colorResource(R.color.inActiveMenu)
+    }
 
     Column(
         modifier = Modifier.clickable(onClick = onClick),
