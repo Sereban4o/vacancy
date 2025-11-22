@@ -19,8 +19,22 @@ object Constants {
     object Debounce {
         /**
          * Задержка для debounce-поиска (мс).
-         * Используется, например, в экране поиска вакансий.
+         * В ТЗ для Epic 1 — 2000 мс, сюда можно будет обновить под него.
          */
         const val SEARCH_DELAY_MS: Long = 600L
+    }
+
+    object Navigation {
+        /**
+         * Route экрана деталей вакансии.
+         * Используется в NavGraph и хелперах навигации.
+         */
+        const val VACANCY_DETAILS_ROUTE: String = "VacancyDetails"
+
+        /**
+         * Имя аргумента для ID вакансии в навигации.
+         * Route: VacancyDetails/{vacancyId}
+         */
+        const val ARG_VACANCY_ID: String = "vacancyId"
     }
 }

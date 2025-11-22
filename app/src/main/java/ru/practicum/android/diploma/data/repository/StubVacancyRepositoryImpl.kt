@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.data.repository
 
 import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.domain.api.StubVacancyRepository
-import ru.practicum.android.diploma.domain.models.StubVacancy
+import ru.practicum.android.diploma.domain.models.Vacancy
 
 /**
  * Базовая реализация репозитория.
@@ -12,7 +12,7 @@ class StubVacancyRepositoryImpl(
     private val networkClient: NetworkClient
 ) : StubVacancyRepository {
 
-    override suspend fun getStubVacancies(): List<StubVacancy> {
+    override suspend fun getStubVacancies(): List<Vacancy> {
         // Пример использования NetworkClient + ApiService:
         // networkClient.execute { ping() }
 
