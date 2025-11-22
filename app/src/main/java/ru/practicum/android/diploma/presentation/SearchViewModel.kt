@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.ui.main
+package ru.practicum.android.diploma.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.interactors.SearchVacanciesInteractor
+import ru.practicum.android.diploma.ui.main.SearchErrorType
+import ru.practicum.android.diploma.ui.main.SearchUiState
 import ru.practicum.android.diploma.util.Constants.Debounce.SEARCH_DELAY_MS
 
 /**
@@ -53,7 +55,7 @@ class SearchViewModel(
                 current.copy(
                     isLoading = false,
                     vacancies = emptyList(),
-                    errorMessage = null
+                    errorType = SearchErrorType.NONE
                 )
             }
             return

@@ -7,6 +7,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.presentation.SearchViewModel
 
 @Composable
 fun SearchScreen(
