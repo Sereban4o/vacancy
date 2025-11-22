@@ -92,7 +92,7 @@ class SearchViewModel(
         _uiState.update { current ->
             current.copy(
                 isLoading = true,
-                errorMessage = null
+                errorType = SearchErrorType.NONE
             )
         }
 
@@ -107,7 +107,7 @@ class SearchViewModel(
                 current.copy(
                     isLoading = false,
                     vacancies = result.vacancies,
-                    errorMessage = null
+                    errorType = SearchErrorType.NONE
                 )
             }
         } catch (io: IOException) {
@@ -115,15 +115,7 @@ class SearchViewModel(
             _uiState.update { current ->
                 current.copy(
                     isLoading = false,
-                    errorMessage = "Проверьте подключение к интернету"
-                )
-            }
-        } catch (e: Exception) {
-            // Любая другая ошибка
-            _uiState.update { current ->
-                current.copy(
-                    isLoading = false,
-                    errorMessage = "Произошла ошибка"
+                    errorType = SearchErrorType.NETWORK
                 )
             }
         }

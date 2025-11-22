@@ -5,5 +5,7 @@
     <string name="mainHeading">Поиск вакансий</string>
     <string name="favorites">Избранное</string>
     <string name="team">Команда</string>
+    <string name="error_network">Проверьте подключение к интернету</string>
+    <string name="error_general">Произошла ошибка</string>
 
 </resources>

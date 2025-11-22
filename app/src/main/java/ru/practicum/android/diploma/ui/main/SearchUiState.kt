@@ -15,6 +15,6 @@ data class SearchUiState(
     val query: String = "",
     val isLoading: Boolean = false,
     val vacancies: List<Vacancy> = emptyList(),
-    val errorMessage: String? = null,
+    val errorType: SearchErrorType = SearchErrorType.NONE,
     val isInitial: Boolean = true
 )
