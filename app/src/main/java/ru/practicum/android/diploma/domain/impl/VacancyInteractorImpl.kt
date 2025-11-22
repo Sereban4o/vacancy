@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.domain.impl
 
 import ru.practicum.android.diploma.domain.api.StubVacancyRepository
-import ru.practicum.android.diploma.domain.models.StubVacancy
+import ru.practicum.android.diploma.domain.models.Vacancy
 
 /**
  * Базовый интерактор для работы с вакансиями.
@@ -12,7 +12,7 @@ class VacancyInteractorImpl(
     private val repository: StubVacancyRepository
 ) {
 
-    suspend fun getStubVacancies(): List<StubVacancy> {
+    suspend fun getStubVacancies(): List<Vacancy> {
         return repository.getStubVacancies()
     }
 }
