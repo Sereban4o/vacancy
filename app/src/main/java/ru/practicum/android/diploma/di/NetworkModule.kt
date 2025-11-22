@@ -13,7 +13,7 @@ import ru.practicum.android.diploma.data.network.NetworkClientImpl
 import ru.practicum.android.diploma.util.NetworkStatusChecker
 import ru.practicum.android.diploma.util.NetworkStatusCheckerImpl
 
-private const val BASE_URL = "https://example.com/" // TODO: заменить на реальный baseUrl API
+private const val BASE_URL = "https://example.com/" // NOTE: заменить на реальный baseUrl API
 
 val networkModule = module {
 

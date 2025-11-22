@@ -6,7 +6,7 @@ package ru.practicum.android.diploma.util
  * Вынесены сюда, чтобы не было "магических чисел" и значений,
  * размазанных по утилитам.
  */
-object AppConstants {
+object Constants {
 
     object Network {
         /**

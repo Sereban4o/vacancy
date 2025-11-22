@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
  */
 fun <T> debounce(
     coroutineScope: CoroutineScope,
-    delayMs: Long = AppConstants.Debounce.SEARCH_DELAY_MS,
+    delayMs: Long = Constants.Debounce.SEARCH_DELAY_MS,
     onDebounced: (T) -> Unit
 ): (T) -> Unit {
     var debounceJob: Job? = null
