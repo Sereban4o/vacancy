@@ -6,34 +6,75 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
-private val DarkColorScheme = darkColorScheme(
-    primary = DarkPrimary,
-    onPrimary = DarkOnPrimary,
-    secondary = DarkSecondary,
-    onSecondary = DarkOnSecondary,
-    background = DarkBackground,
-    onBackground = DarkOnBackground
-)
+// -----------------------------
+// LIGHT / DARK COLOR SCHEMES
+// -----------------------------
+// Используем новые имена из Color.kt (PrimaryLight и т.д.),
+// но значения там — из твоей старой зелёно-синей палитры.
 
 private val LightColorScheme = lightColorScheme(
-    primary = LightPrimary,
-    onPrimary = LightOnPrimary,
-    secondary = LightSecondary,
-    onSecondary = LightOnSecondary,
-    background = LightBackground,
-    onBackground = LightOnBackground
+    primary = PrimaryLight,
+    onPrimary = OnPrimaryLight,
+    secondary = SecondaryLight,
+    onSecondary = OnSecondaryLight,
+    background = BackgroundLight,
+    onBackground = OnBackgroundLight,
+    surface = SurfaceLight,
+    onSurface = OnSurfaceLight,
+    error = ErrorColor,
+    onError = OnErrorColor,
 )
 
+private val DarkColorScheme = darkColorScheme(
+    primary = PrimaryDark,
+    onPrimary = OnPrimaryDark,
+    secondary = SecondaryDark,
+    onSecondary = OnSecondaryDark,
+    background = BackgroundDark,
+    onBackground = OnBackgroundDark,
+    surface = SurfaceDark,
+    onSurface = OnSurfaceDark,
+    error = ErrorColor,
+    onError = OnErrorColor,
+)
+
+// -----------------------------
+// ОСНОВНАЯ COMPOSE-ТЕМА
+// -----------------------------
+// Новый "канонический" вход: VacancyTheme (из Issue 7).
+
 @Composable
-fun PracticumAndroidDiplomaTheme(
+fun VacancyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = AppTypography,
-        content = content
+        typography = VacancyTypography,
+        content = content,
     )
+}
+
+// -----------------------------
+// АЛИАСЫ ДЛЯ СОВМЕСТИМОСТИ
+// -----------------------------
+// 1) AppTheme — как в Issue 7.3
+// 2) PracticumAndroidDiplomaTheme — как в Issue 3
+
+@Composable
+fun AppTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit,
+) {
+    VacancyTheme(darkTheme = darkTheme, content = content)
+}
+
+@Composable
+fun PracticumAndroidDiplomaTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit,
+) {
+    VacancyTheme(darkTheme = darkTheme, content = content)
 }

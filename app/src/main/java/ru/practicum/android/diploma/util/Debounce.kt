@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
  *
  * private val searchDebounce = debounce<String>(
  *     coroutineScope = viewModelScope,
- *     delayMs = 600L
+ *     delayMs = AppConstants.Debounce.SEARCH_DELAY_MS
  * ) { query ->
  *     performSearch(query)
  * }
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
  */
 fun <T> debounce(
     coroutineScope: CoroutineScope,
-    delayMs: Long = 600L,
+    delayMs: Long = AppConstants.Debounce.SEARCH_DELAY_MS,
     onDebounced: (T) -> Unit
 ): (T) -> Unit {
     var debounceJob: Job? = null
