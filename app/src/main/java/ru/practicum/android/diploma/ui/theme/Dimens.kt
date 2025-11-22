@@ -16,9 +16,9 @@ val CornerRadiusLarge = 16.dp
 // ---------- Типографика: строго по методичке ----------
 
 // Размеры текста
-val TextSizeSmall = 11.sp      // labelSmall
-val TextSizeMedium = 16.sp     // bodyLarge
-val TextSizeLarge = 22.sp      // titleLarge
+val TextSizeSmall = 11.sp // labelSmall
+val TextSizeMedium = 16.sp // bodyLarge
+val TextSizeLarge = 22.sp // titleLarge
 
 // Высота строки
 val TextLineHeightSmall = 16.sp
