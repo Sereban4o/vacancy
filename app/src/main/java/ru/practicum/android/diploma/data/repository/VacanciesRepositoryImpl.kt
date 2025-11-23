@@ -13,12 +13,12 @@ private const val VACANCIES_PER_PAGE = 20
 class VacanciesRepositoryImpl(
     private val remoteDataSource: VacanciesRemoteDataSource
 ) : VacanciesRepository {
+
     override suspend fun searchVacancies(
         query: String,
         page: Int,
         filters: SearchFilters?
     ): VacanciesSearchResult {
-
         val requestDto = VacancySearchRequestDto(
             text = query,
             page = page,
@@ -30,7 +30,6 @@ class VacanciesRepositoryImpl(
         )
 
         val responseDto = remoteDataSource.searchVacancies(requestDto)
-
         return responseDto.toDomain()
     }
 }
