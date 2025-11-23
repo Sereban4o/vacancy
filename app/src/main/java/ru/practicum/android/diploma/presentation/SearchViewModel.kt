@@ -98,7 +98,8 @@ class SearchViewModel(
                 current.copy(
                     isLoading = false,
                     vacancies = result.vacancies,
-                    errorType = SearchErrorType.NONE
+                    errorType = SearchErrorType.NONE,
+                    totalFound = result.found
                 )
             }
         } catch (io: IOException) {

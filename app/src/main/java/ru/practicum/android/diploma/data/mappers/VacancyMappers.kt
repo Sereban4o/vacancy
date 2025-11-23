@@ -12,7 +12,13 @@ fun VacancyDto.toDomain(): Vacancy {
     return Vacancy(
         id = id,
         title = name,
-        company = employer?.name.orEmpty()
+        company = employer?.name.orEmpty(),
+        logoUrl = employer?.logoUrls?.small
+            ?: employer?.logoUrls?.original
+            ?: employer?.logoUrls?.large,
+        salaryFrom = salary?.from,
+        salaryTo = salary?.to,
+        currency = salary?.currency
         // если потом добавим зарплату/город в доменную модель — сюда же добавим
     )
 }
@@ -24,6 +30,7 @@ fun VacancySearchResponseDto.toDomain(): VacanciesSearchResult {
     return VacanciesSearchResult(
         vacancies = vacancies.map { it.toDomain() },
         page = page,
-        pages = pages
+        pages = pages,
+        found = found
     )
 }

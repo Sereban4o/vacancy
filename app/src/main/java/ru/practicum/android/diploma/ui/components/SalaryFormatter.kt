@@ -1,0 +1,45 @@
+package ru.practicum.android.diploma.ui.components
+
+import android.annotation.SuppressLint
+import ru.practicum.android.diploma.domain.models.Vacancy
+import java.text.NumberFormat
+import java.util.Locale
+
+// Форматтер чисел с разделением на разряды.
+// Используем Locale.getDefault(), чтобы не ловить ворнинги про захардкоженную локаль.
+@SuppressLint("ConstantLocale")
+private val salaryNumberFormat: NumberFormat =
+    NumberFormat.getInstance(Locale.getDefault()).apply {
+        isGroupingUsed = true // "1000000" -> "1 000 000"
+    }
+
+private fun formatNumber(value: Int): String {
+    // Некоторые локали используют неразрывный пробел — заменяем на обычный.
+    return salaryNumberFormat.format(value).replace('\u00A0', ' ')
+}
+
+/**
+ * Форматирование зарплаты по правилам ТЗ:
+ * - "от XX", "до XX", "от XX до XX"
+ * - "зарплата не указана", если нет значений
+ * - валюта отображается всегда
+ * - числа с разбиением на разряды
+ */
+fun formatSalary(vacancy: Vacancy): String {
+    val from = vacancy.salaryFrom
+    val to = vacancy.salaryTo
+    val currencyCode = vacancy.currency ?: "RUR"
+
+    // Пока просто показываем код валюты (RUR, USD, EUR, ...).
+    val currency = currencyCode
+
+    val fromStr = from?.let { formatNumber(it) }
+    val toStr = to?.let { formatNumber(it) }
+
+    return when {
+        fromStr != null && toStr != null -> "от $fromStr до $toStr $currency"
+        fromStr != null -> "от $fromStr $currency"
+        toStr != null -> "до $toStr $currency"
+        else -> "зарплата не указана"
+    }
+}
