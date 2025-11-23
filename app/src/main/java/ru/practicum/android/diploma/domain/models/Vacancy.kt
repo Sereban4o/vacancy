@@ -8,7 +8,7 @@ data class Vacancy(
     val id: String,
     val title: String,
     val company: String,
-    val logoUrl: String?,      // ← из employer.logo
+    val logoUrl: String?,
     val salaryFrom: Int?,
     val salaryTo: Int?,
     val currency: String?

@@ -15,7 +15,8 @@ import ru.practicum.android.diploma.data.network.NetworkClientImpl
 import ru.practicum.android.diploma.data.network.NetworkStatusChecker
 import ru.practicum.android.diploma.data.network.NetworkStatusCheckerImpl
 
-private const val BASE_URL = "https://practicum-diploma-8bc38133faba.herokuapp.com/" // NOTE: заменить на реальный baseUrl API
+// Базовый URL Practicum Vacancies API
+private const val BASE_URL = "https://practicum-diploma-8bc38133faba.herokuapp.com/"
 
 val networkModule = module {
 

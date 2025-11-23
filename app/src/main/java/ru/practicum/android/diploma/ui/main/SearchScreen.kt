@@ -10,9 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.R
-import androidx.compose.ui.res.stringResource
 import ru.practicum.android.diploma.presentation.SearchViewModel
 import ru.practicum.android.diploma.ui.components.VacancyItem
 
@@ -73,7 +73,7 @@ fun SearchContent(
             )
         }
 
-        // TODO: сюда добавишь поле ввода запроса (TextField), когда будешь верстать поиск
+        // NOTE: сюда добавишь поле ввода запроса (TextField), когда будешь верстать поиск
 
         // Список вакансий
         LazyColumn(

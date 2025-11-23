@@ -17,7 +17,6 @@ class VacanciesRemoteDataSourceImpl(
     override suspend fun searchVacancies(
         request: VacancySearchRequestDto
     ): VacancySearchResponseDto = withContext(ioDispatcher) {
-
         val params = mutableMapOf<String, String>()
 
         // обязательные

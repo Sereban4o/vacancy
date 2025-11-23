@@ -23,8 +23,8 @@ fun CompanyLogo(
         contentDescription = null,
         modifier = modifier,
         placeholder = placeholder, // пока грузится
-        error = placeholder,       // если ошибка
-        fallback = placeholder,    // если url == null
+        error = placeholder, // если ошибка
+        fallback = placeholder, // если url == null
         contentScale = ContentScale.Crop
     )
 }
