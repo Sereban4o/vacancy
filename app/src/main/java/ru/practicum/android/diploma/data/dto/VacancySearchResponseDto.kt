@@ -4,10 +4,18 @@ import com.google.gson.annotations.SerializedName
 
 /**
  * Ответ /vacancies из Practicum Vacancies API.
+ *
+ * VacancyResponse {
+ *   found: integer
+ *   pages: integer
+ *   page: integer
+ *   vacancies: Array[VacancyDetail]
+ * }
  */
 data class VacancySearchResponseDto(
+
     @SerializedName("vacancies")
-    val vacancies: List<VacancyDto>,
+    val vacancies: List<VacancyDetailDto>,
 
     @SerializedName("found")
     val found: Int,

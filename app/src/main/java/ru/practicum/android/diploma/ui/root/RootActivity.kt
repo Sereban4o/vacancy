@@ -41,6 +41,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.navigation.NavGraph
+import ru.practicum.android.diploma.ui.navigation.VACANCY_DETAILS_ROUTE
 import ru.practicum.android.diploma.ui.theme.AppTheme
 import ru.practicum.android.diploma.ui.theme.PaddingScreenHorizontal
 import ru.practicum.android.diploma.util.Routes
@@ -63,6 +64,21 @@ fun Root() {
     val navController = rememberNavController()
     val topPadding = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
 
+    // Получаем текущий экран
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    // Основные экраны
+    val isMain = currentRoute == Routes.Main.name
+    val isFavorites = currentRoute == Routes.Favorites.name
+    val isTeam = currentRoute == Routes.Team.name
+
+    // Экран деталей (динамический route, например vacancy/123)
+    val isVacancyDetails = currentRoute?.startsWith(VACANCY_DETAILS_ROUTE) == true
+
+    // Показываем нижнюю панель только на Main / Favorites / Team
+    val showBottomBar = (isMain || isFavorites || isTeam) && !isVacancyDetails
+
     Column(
         Modifier
             .fillMaxSize()
@@ -74,7 +90,9 @@ fun Root() {
                 Spacer(Modifier.height(0.dp))
             },
             bottomBar = {
-                BottomNavigationBar(navController)
+                if (showBottomBar) {
+                    BottomNavigationBar(navController)
+                }
             }
         ) { innerPadding ->
             NavGraph(

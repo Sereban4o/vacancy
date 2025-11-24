@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.data.mappers
 
-import ru.practicum.android.diploma.data.dto.VacancyDto
+import ru.practicum.android.diploma.data.dto.VacancyDetailDto
 import ru.practicum.android.diploma.data.dto.VacancySearchResponseDto
 import ru.practicum.android.diploma.domain.models.VacanciesSearchResult
 import ru.practicum.android.diploma.domain.models.Vacancy
@@ -8,18 +8,15 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 /**
  * Маппер одного VacancyDto в доменную Vacancy.
  */
-fun VacancyDto.toDomain(): Vacancy {
+fun VacancyDetailDto.toDomain(): Vacancy {
     return Vacancy(
         id = id,
         title = name,
-        company = employer?.name.orEmpty(),
-        logoUrl = employer?.logoUrls?.small
-            ?: employer?.logoUrls?.original
-            ?: employer?.logoUrls?.large,
+        company = employer.name,
+        logoUrl = employer.logo,
         salaryFrom = salary?.from,
         salaryTo = salary?.to,
         currency = salary?.currency
-        // если потом добавим зарплату/город в доменную модель — сюда же добавим
     )
 }
 
