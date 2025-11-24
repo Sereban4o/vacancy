@@ -7,13 +7,13 @@ import ru.practicum.android.diploma.data.dto.FilterAreaDto
 import ru.practicum.android.diploma.data.dto.FilterIndustryDto
 import ru.practicum.android.diploma.data.dto.VacancyDetailDto
 import ru.practicum.android.diploma.data.dto.VacancySearchResponseDto
+
 /**
  * Retrofit API для Practicum Vacancies API.
  *
  * baseUrl: https://practicum-diploma-8bc38133faba.herokuapp.com/
  */
 interface VacanciesApiService {
-
     /**
      * Поиск вакансий с фильтрами.
      *
