@@ -5,5 +5,13 @@
     <string name="mainHeading">Поиск вакансий</string>
     <string name="favorites">Избранное</string>
     <string name="team">Команда</string>
-
+    
+    // Teamscreen
+    <string name="team_title">Над приложением работали</string>
+    <string-array name="team_members">
+        <item>Сергей Васенин</item>
+        <item>Андрей Хлоповских</item>
+        <item>Аманжол Аимов</item>
+        <item>Виталий Ярош</item>
+    </string-array>
 </resources>
