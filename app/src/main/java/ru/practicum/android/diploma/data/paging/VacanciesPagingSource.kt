@@ -13,7 +13,8 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 class VacanciesPagingSource(
     private val remoteDataSource: VacanciesRemoteDataSource,
     private val query: String,
-    private val filters: SearchFilters? = null
+    private val filters: SearchFilters? = null,
+    private val onTotalFound : (Int) -> Unit ={}
 ) : PagingSource<Int, Vacancy>() {
 
     // Функция чтобы при обновлении пользователь не терял свою позицию
@@ -30,6 +31,8 @@ class VacanciesPagingSource(
         return try {
             val currentPage = params.key ?: 0
 
+            Log.d("PAGING_DEBUG", "Loading page: $currentPage, loadSize: ${params.loadSize}")
+
             val requestDto = VacancySearchRequestDto(
                 text = query,
                 page = currentPage,
@@ -44,9 +47,14 @@ class VacanciesPagingSource(
 
             val vacancies = response.vacancies.map { it.toDomain() }
 
+            if(currentPage == 0){
+                onTotalFound(response.found)
+            }
 
             val prevPage = if(currentPage > 0) currentPage - 1 else null
-            val nextPage = if(currentPage < response.pages) currentPage+1 else null
+            val nextPage = if(currentPage < response.pages - 1) currentPage + 1 else null
+
+            Log.d("PAGING_DEBUG", "Loaded ${vacancies.size} vacancies, pages: ${response.pages}, nextKey: $nextPage")
 
             LoadResult.Page(
                 data = vacancies,

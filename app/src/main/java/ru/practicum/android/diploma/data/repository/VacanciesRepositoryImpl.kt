@@ -22,41 +22,23 @@ class VacanciesRepositoryImpl(
     private val remoteDataSource: VacanciesRemoteDataSource
 ) : VacanciesRepository {
 
-    // Не уверен нужен ли нам этот метод, если поиск осуществляется с пагинацией, но пока удалять не буду
-    override suspend fun searchVacancies(
-        query: String,
-        page: Int,
-        filters: SearchFilters?
-    ): VacanciesSearchResult {
-        val requestDto = VacancySearchRequestDto(
-            text = query,
-            page = page,
-            perPage = VACANCIES_PER_PAGE,
-            salaryFrom = filters?.salaryFrom,
-            onlyWithSalary = filters?.onlyWithSalary ?: false,
-            regionId = filters?.regionId,
-            industryId = filters?.industryId,
-        )
-
-        val responseDto = remoteDataSource.searchVacancies(requestDto)
-        return responseDto.toDomain()
-    }
-
     override fun searchVacanciesPaged(
         query: String,
-        filters: SearchFilters?
+        filters: SearchFilters?,
+        onTotalFound : (Int) -> Unit
     ): Flow<PagingData<Vacancy>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 20,
-                initialLoadSize = 20,
+                pageSize = VACANCIES_PER_PAGE,
+                initialLoadSize = VACANCIES_PER_PAGE,
                 enablePlaceholders = false // Отвечает за то, прогружать ли ещё незагруженный (пустой) список
             ),
             pagingSourceFactory = {
                 VacanciesPagingSource(
                     remoteDataSource = remoteDataSource,
                     query = query,
-                    filters = filters
+                    filters = filters,
+                    onTotalFound = onTotalFound
                 )
             },
         ).flow

@@ -11,26 +11,16 @@ class SearchVacanciesInteractorImpl(
     private val vacanciesRepository: VacanciesRepository
 ) : SearchVacanciesInteractor{
 
-    override suspend fun search(
-        query: String,
-        page: Int,
-        filters: SearchFilters?
-    ): VacanciesSearchResult {
-        return vacanciesRepository.searchVacancies(
-            query = query,
-            page = page,
-            filters = filters
-        )
-    }
-
-    // Используем этот метод
+    // Теперь используем этот метод для поиска
     override suspend fun searchPaged(
         query: String,
-        filters: SearchFilters?
+        filters: SearchFilters?,
+        onTotalFound : (Int) -> Unit
     ): Flow<PagingData<Vacancy>> {
         return vacanciesRepository.searchVacanciesPaged(
             query = query,
-            filters = filters
+            filters = filters,
+            onTotalFound = onTotalFound
         )
     }
 }
