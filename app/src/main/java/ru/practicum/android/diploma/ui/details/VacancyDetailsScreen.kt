@@ -12,7 +12,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun VacancyDetailsScreen(
     vacancyId: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit
 ) {
     Column(
         modifier = modifier

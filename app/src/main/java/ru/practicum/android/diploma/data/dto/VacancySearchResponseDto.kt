@@ -14,7 +14,7 @@ import com.google.gson.annotations.SerializedName
  */
 data class VacancySearchResponseDto(
 
-    @SerializedName("vacancies")
+    @SerializedName("items") // 🔴 было "vacancies" но по факту там items
     val vacancies: List<VacancyDetailDto>,
 
     @SerializedName("found")

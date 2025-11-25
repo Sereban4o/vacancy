@@ -76,16 +76,16 @@ data class SalaryDto(
  */
 data class AddressDto(
     @SerializedName("city")
-    val city: String,
+    val city: String?,
 
     @SerializedName("street")
-    val street: String,
+    val street: String?,
 
     @SerializedName("building")
-    val building: String,
+    val building: String?,
 
-    @SerializedName("fullAddress")
-    val fullAddress: String
+    @SerializedName("raw")
+    val fullAddress: String? // берём поле raw
 )
 
 /**
@@ -157,8 +157,16 @@ data class ContactsDto(
     @SerializedName("email")
     val email: String?,
 
-    @SerializedName("phone")
-    val phone: List<String>?
+    @SerializedName("phones")
+    val phones: List<PhoneDto>? // 🔴 phones, не phone
+)
+
+data class PhoneDto(
+    @SerializedName("comment")
+    val comment: String?,
+
+    @SerializedName("formatted")
+    val formatted: String
 )
 
 /**
@@ -194,13 +202,13 @@ data class EmployerDto(
  */
 data class FilterAreaDto(
     @SerializedName("id")
-    val id: Int,
+    val id: String,
 
     @SerializedName("name")
     val name: String,
 
     @SerializedName("parentId")
-    val parentId: Int?,
+    val parentId: String?,
 
     @SerializedName("areas")
     val areas: List<FilterAreaDto>
@@ -216,7 +224,7 @@ data class FilterAreaDto(
  */
 data class FilterIndustryDto(
     @SerializedName("id")
-    val id: Int,
+    val id: String, // 🔴 было Int
 
     @SerializedName("name")
     val name: String

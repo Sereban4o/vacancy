@@ -2,9 +2,11 @@ package ru.practicum.android.diploma.data.repository
 
 import ru.practicum.android.diploma.data.dto.VacancySearchRequestDto
 import ru.practicum.android.diploma.data.mappers.toDomain
+import ru.practicum.android.diploma.data.mappers.toDomainDetails
 import ru.practicum.android.diploma.data.network.VacanciesRemoteDataSource
 import ru.practicum.android.diploma.domain.models.SearchFilters
 import ru.practicum.android.diploma.domain.models.VacanciesSearchResult
+import ru.practicum.android.diploma.domain.models.VacancyDetails
 import ru.practicum.android.diploma.domain.repository.VacanciesRepository
 
 // требование ТЗ: страница = 20 элементов
@@ -31,5 +33,10 @@ class VacanciesRepositoryImpl(
 
         val responseDto = remoteDataSource.searchVacancies(requestDto)
         return responseDto.toDomain()
+    }
+
+    override suspend fun getVacancyDetails(id: String): VacancyDetails {
+        val dto = remoteDataSource.getVacancyDetails(id)
+        return dto.toDomainDetails()
     }
 }
