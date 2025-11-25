@@ -32,10 +32,8 @@ fun NavGraph(
         navController = navHostController,
         startDestination = startDestination
     ) {
-
         // --- Main screen ---
         composable(route = Routes.Main.name) {
-
             MainScreen(
                 modifier = modifier,
 

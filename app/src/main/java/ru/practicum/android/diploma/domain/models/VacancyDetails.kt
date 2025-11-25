@@ -15,7 +15,7 @@ data class VacancyDetails(
     val schedule: String?, // Schedule.name
     val employment: String?, // Employment.name
     val skills: List<String>, // пустой список, если с сервера пришёл null
-    val contacts: VacancyContacts?,// null, если нет contacts
+    val contacts: VacancyContacts?, // null, если нет contacts
     val vacancyUrl: String // url
 )
 
