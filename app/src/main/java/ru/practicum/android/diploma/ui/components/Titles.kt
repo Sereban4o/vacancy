@@ -11,6 +11,11 @@ import androidx.compose.ui.unit.Dp
 import ru.practicum.android.diploma.ui.theme.PaddingScreenTitleVertical
 import ru.practicum.android.diploma.ui.theme.PaddingSmall
 
+/**
+ * Базовый компонент для всех заголовков.
+ *
+ * Используется для Heading(), DisplayTitle() и других заголовков.
+ */
 @Composable
 private fun BaseTitleText(
     text: String,
@@ -28,6 +33,12 @@ private fun BaseTitleText(
     )
 }
 
+/**
+ * Основной заголовок экрана.
+ *
+ * Это то, что Виталий делал — titleLarge + вертикальный padding.
+ * Совпадает поэтому ничего не изменил
+ */
 @Composable
 fun Heading(
     modifier: Modifier = Modifier,
@@ -41,6 +52,10 @@ fun Heading(
     )
 }
 
+/**
+ * Более крупный заголовок (используется реже).
+ * идет от Сергея
+ */
 @Composable
 fun DisplayTitle(
     modifier: Modifier = Modifier,

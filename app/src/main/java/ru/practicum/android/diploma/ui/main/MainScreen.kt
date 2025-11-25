@@ -1,40 +1,46 @@
 package ru.practicum.android.diploma.ui.main
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import org.koin.androidx.compose.koinViewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.presentation.search.SearchViewModel
+import ru.practicum.android.diploma.ui.components.ActionIcon
 import ru.practicum.android.diploma.ui.components.Heading
 
 @Composable
 fun MainScreen(
     modifier: Modifier,
-    onOpenMockVacancy: () -> Unit,
-    onOpenRealVacancy: () -> Unit
+    onFilterClick: () -> Unit,
+    onVacancyClick: (String) -> Unit
 ) {
-    Column(
-        modifier = modifier.fillMaxSize()
-    ) {
-        Heading(modifier, stringResource(R.string.mainHeading))
+    val searchViewModel: SearchViewModel = koinViewModel()
 
-        Button(
-            onClick = onOpenMockVacancy,
-            modifier = Modifier.padding(top = 24.dp)
+    Column(modifier = modifier) {
+
+        // Заголовок + фильтр
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Открыть мок-вакансию")
+            Heading(text = stringResource(R.string.mainHeading))
+            Spacer(Modifier.weight(1f))
+            ActionIcon(
+                iconRes = R.drawable.ic_filter_24,
+                onClick = onFilterClick
+            )
         }
 
-        Button(
-            onClick = onOpenRealVacancy,
-            modifier = Modifier.padding(top = 16.dp)
-        ) {
-            Text("Открыть реальную вакансию (API)")
-        }
+        // 🔍 Реальный экран поиска
+        SearchScreen(
+            viewModel = searchViewModel,
+            onVacancyClick = onVacancyClick
+        )
     }
 }

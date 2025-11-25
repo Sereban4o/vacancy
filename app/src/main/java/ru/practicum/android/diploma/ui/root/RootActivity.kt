@@ -5,41 +5,14 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.navigation.NavGraph
 import ru.practicum.android.diploma.ui.navigation.VACANCY_DETAILS_ROUTE
 import ru.practicum.android.diploma.ui.theme.AppTheme
@@ -51,6 +24,7 @@ class RootActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             AppTheme {
                 Root()
@@ -62,141 +36,31 @@ class RootActivity : AppCompatActivity() {
 @Composable
 fun Root() {
     val navController = rememberNavController()
-    val topPadding = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
 
-    // Получаем текущий экран
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-
-    // Основные экраны
-    val isMain = currentRoute == Routes.Main.name
-    val isFavorites = currentRoute == Routes.Favorites.name
-    val isTeam = currentRoute == Routes.Team.name
-
-    // Экран деталей (динамический route, например vacancy/123)
-    val isVacancyDetails = currentRoute?.startsWith(VACANCY_DETAILS_ROUTE) == true
-
-    // Показываем нижнюю панель только на Main / Favorites / Team
-    val showBottomBar = (isMain || isFavorites || isTeam) && !isVacancyDetails
-
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(top = topPadding)
-    ) {
-        Scaffold(
-            topBar = {
-                Spacer(Modifier.height(0.dp))
-            },
-            bottomBar = {
-                if (showBottomBar) {
-                    BottomNavigationBar(navController)
-                }
-            }
-        ) { innerPadding ->
-            NavGraph(
-                modifier = Modifier
-                    .padding(horizontal = PaddingScreenHorizontal)
-                    .padding(innerPadding),
-                navHostController = navController
-            )
-        }
+    // определяем, показывать ли нижнюю навигацию
+    val showBottomBar = when {
+        currentRoute?.startsWith(VACANCY_DETAILS_ROUTE) == true -> false
+        currentRoute == Routes.Main.name -> true
+        currentRoute == Routes.Favorites.name -> true
+        currentRoute == Routes.Team.name -> true
+        else -> false
     }
-}
 
-@Composable
-fun BottomNavigationBar(navController: NavHostController) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-
-    Column {
-        Spacer(
+    Scaffold(
+        bottomBar = {
+            if (showBottomBar) {
+                BottomNavigationBar(navController)
+            }
+        }
+    ) { innerPadding ->
+        NavGraph(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(1.dp)
-                .background(colorResource(R.color.divider))
-        )
-        BottomAppBar(containerColor = MaterialTheme.colorScheme.background) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceAround,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                BottomNavigationItem(
-                    icon = painterResource(R.drawable.ic_main_24),
-                    label = stringResource(R.string.main),
-                    selected = currentDestination?.route == Routes.Main.name,
-                    onClick = {
-                        navController.navigate(Routes.Main.name) {
-                            launchSingleTop = true
-                            restoreState = true
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                        }
-                    }
-                )
-
-                BottomNavigationItem(
-                    icon = painterResource(R.drawable.ic_favorites_24),
-                    label = stringResource(R.string.favorites),
-                    selected = currentDestination?.route == Routes.Favorites.name,
-                    onClick = {
-                        navController.navigate(Routes.Favorites.name) {
-                            launchSingleTop = true
-                            restoreState = true
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                        }
-                    }
-                )
-
-                BottomNavigationItem(
-                    icon = painterResource(R.drawable.ic_team_24),
-                    label = stringResource(R.string.team),
-                    selected = currentDestination?.route == Routes.Team.name,
-                    onClick = {
-                        navController.navigate(Routes.Team.name) {
-                            launchSingleTop = true
-                            restoreState = true
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                        }
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun BottomNavigationItem(
-    icon: Painter,
-    label: String,
-    selected: Boolean,
-    onClick: () -> Unit
-) {
-    val color = if (selected) {
-        colorResource(R.color.activeMenu)
-    } else {
-        colorResource(R.color.inActiveMenu)
-    }
-
-    Column(
-        modifier = Modifier.clickable(onClick = onClick),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Icon(painter = icon, contentDescription = label, tint = color)
-        Text(
-            text = label,
-            style = TextStyle(
-                color = color,
-                fontFamily = FontFamily(Font(R.font.ys_display_regular)),
-                fontWeight = FontWeight.Normal,
-                fontSize = 12.sp
-            )
+                .padding(innerPadding)
+                .padding(horizontal = PaddingScreenHorizontal)
+                .background(MaterialTheme.colorScheme.background),
+            navHostController = navController
         )
     }
 }
