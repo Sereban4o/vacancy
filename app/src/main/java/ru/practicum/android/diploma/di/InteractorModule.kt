@@ -1,19 +1,21 @@
 package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
-import ru.practicum.android.diploma.domain.impl.VacancyInteractorImpl
+import ru.practicum.android.diploma.domain.interactors.SearchVacanciesInteractor
+import ru.practicum.android.diploma.domain.interactors.VacancyDetailsInteractor
+import ru.practicum.android.diploma.domain.repository.VacanciesRepository
 
 val interactorModule = module {
 
-    // Вариант 1: если есть интерфейс VacancyInteractor
-    // single<VacancyInteractor> {
-    //     VacancyInteractorImpl(repository = get())
-    // }
-
-    // Вариант 2: пока просто реализация
     single {
-        VacancyInteractorImpl(
-            repository = get()
+        SearchVacanciesInteractor(
+            vacanciesRepository = get()
+        )
+    }
+
+    single {
+        VacancyDetailsInteractor(
+            repository = get<VacanciesRepository>()
         )
     }
 }
