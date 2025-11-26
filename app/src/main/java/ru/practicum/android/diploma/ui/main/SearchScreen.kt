@@ -73,7 +73,7 @@ fun SearchScreen(
         // Количество найденных вакансий
         if (!uiState.isInitial) {
             Text(
-                text = "Найдено $totalFound вакансий",
+                text = stringResource(R.string.found_vacancies, totalFound),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(

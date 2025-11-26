@@ -11,7 +11,7 @@ class SearchVacanciesInteractorImpl(
 ) : SearchVacanciesInteractor {
 
     // Используем этот метод
-    override suspend fun searchPaged(
+    override fun searchPaged(
         query: String,
         filters: SearchFilters?,
         onTotalFound: (Int) -> Unit

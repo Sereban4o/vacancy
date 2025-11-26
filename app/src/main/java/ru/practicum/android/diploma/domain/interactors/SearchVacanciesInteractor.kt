@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 
 interface SearchVacanciesInteractor {
 
-    suspend fun searchPaged(
+    fun searchPaged(
         query: String,
         filters: SearchFilters? = null,
         onTotalFound: (Int) -> Unit

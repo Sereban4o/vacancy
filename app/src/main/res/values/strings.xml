@@ -7,6 +7,7 @@
     <string name="team">Команда</string>
     <string name="error_network">Проверьте подключение к интернету</string>
     <string name="error_general">Произошла ошибка</string>
+    <string name="found_vacancies">Найдено %d вакансий</string>
 
     // Teamscreen
     <string name="team_title">Над приложением работали</string>
