@@ -39,7 +39,6 @@ fun SearchScreen(
     LaunchedEffect(Unit) {
         // Принудительно запускаем обновление при первом рендере (без этого ищет только со 2 раза)
         if (uiState.query.isNotBlank() && pagedData.itemCount == 0) {
-
             pagedData.retry()
         }
     }
@@ -124,11 +123,11 @@ private fun CreateVacancyList(
 }
 
 @Composable
-private fun LoadingStateHandler(pagedData: LazyPagingItems<Vacancy>){
+private fun LoadingStateHandler(pagedData: LazyPagingItems<Vacancy>) {
     // Обработка состояний загрузки
-    LaunchedEffect(pagedData.loadState){
-        when ( val refreshState = pagedData.loadState.refresh ){
-            is LoadState.Loading ->{
+    LaunchedEffect(pagedData.loadState) {
+        when (val refreshState = pagedData.loadState.refresh) {
+            is LoadState.Loading -> {
                 // Происходит загрузка данных
             }
             is LoadState.NotLoading -> {

@@ -10,6 +10,6 @@ interface SearchVacanciesInteractor {
     suspend fun searchPaged(
         query: String,
         filters: SearchFilters? = null,
-        onTotalFound : (Int) -> Unit
+        onTotalFound: (Int) -> Unit
     ): Flow<PagingData<Vacancy>>
 }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import ru.practicum.android.diploma.domain.interactors.SearchVacanciesInteractor
@@ -25,7 +26,7 @@ import ru.practicum.android.diploma.ui.main.SearchUiState
  * и по истечении паузы вызывает доменный interactor.
  */
 
-// Решал конфликты с ветками так что этот файл не попал в пр, но его я тоже менял, просмотрите пожалуйста
+
 class SearchViewModel(
     private val searchVacanciesInteractor: SearchVacanciesInteractor
 ) : ViewModel() {
@@ -48,9 +49,10 @@ class SearchViewModel(
             if (query.isBlank()){
                 // Вернём пустой поток при пустом запросе
                 _totalFound.value = 0
-                kotlinx.coroutines.flow.flow { emit(PagingData.empty()) }
+                kotlinx.coroutines.flow.flow { emit(PagingData.empty<Vacancy>()) }
             }else{
                 // Пагинированный поиск через интерактор (пока без фильтров)
+                kotlinx.coroutines.flow.flow { emitAll(
                 searchVacanciesInteractor.searchPaged(
                     query = query,
                     filters = null,
@@ -58,6 +60,8 @@ class SearchViewModel(
                         _totalFound.value = total
                     }
                 )
+                )
+                }
             }
         }
         .cachedIn(viewModelScope)// Кеширование для последующего переиспользования данных (а не выполнения нового запроса заново)

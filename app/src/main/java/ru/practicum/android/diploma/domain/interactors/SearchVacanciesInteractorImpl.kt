@@ -14,7 +14,7 @@ class SearchVacanciesInteractorImpl(
     override suspend fun searchPaged(
         query: String,
         filters: SearchFilters?,
-        onTotalFound : (Int) -> Unit
+        onTotalFound: (Int) -> Unit
     ): Flow<PagingData<Vacancy>> {
         return vacanciesRepository.searchVacanciesPaged(
             query = query,

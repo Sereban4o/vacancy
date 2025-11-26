@@ -1,7 +1,5 @@
 package ru.practicum.android.diploma.data.paging
 
-import android.util.Log
-import androidx.compose.runtime.key
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import ru.practicum.android.diploma.data.dto.VacancySearchRequestDto
@@ -14,15 +12,15 @@ class VacanciesPagingSource(
     private val remoteDataSource: VacanciesRemoteDataSource,
     private val query: String,
     private val filters: SearchFilters? = null,
-    private val onTotalFound : (Int) -> Unit ={}
+    private val onTotalFound: (Int) -> Unit = {}
 ) : PagingSource<Int, Vacancy>() {
 
     // Функция чтобы при обновлении пользователь не терял свою позицию
     override fun getRefreshKey(state: PagingState<Int, Vacancy>): Int? {
         // Вычисляем ближайшую позицию к "якорю"
-        return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1) ?:
-            state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+        return state.anchorPosition?.let {
+            anchorPosition ->
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1) ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
 
@@ -45,9 +43,8 @@ class VacanciesPagingSource(
 
             val vacancies = response.vacancies.map { it.toDomain() }
 
-
-            val prevPage = if ( currentPage > 0 ) currentPage - 1 else null
-            val nextPage = if ( currentPage < response.pages ) currentPage + 1 else null
+            val prevPage = if (currentPage > 0) currentPage - 1 else null
+            val nextPage = if (currentPage < response.pages) currentPage + 1 else null
 
             if ( currentPage == 0 ) {
                 onTotalFound(response.found)
@@ -55,10 +52,10 @@ class VacanciesPagingSource(
 
             LoadResult.Page(
                 data = vacancies,
-                prevKey =prevPage,
+                prevKey = prevPage,
                 nextKey = nextPage
             )
-        }catch (e: Exception){
+        } catch (e: Exception) {
             LoadResult.Error(e)
         }
     }

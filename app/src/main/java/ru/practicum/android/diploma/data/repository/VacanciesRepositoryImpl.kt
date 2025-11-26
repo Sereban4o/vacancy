@@ -5,13 +5,10 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
-import ru.practicum.android.diploma.data.dto.VacancySearchRequestDto
-import ru.practicum.android.diploma.data.mappers.toDomain
 import ru.practicum.android.diploma.data.mappers.toDomainDetails
 import ru.practicum.android.diploma.data.network.VacanciesRemoteDataSource
 import ru.practicum.android.diploma.data.paging.VacanciesPagingSource
 import ru.practicum.android.diploma.domain.models.SearchFilters
-import ru.practicum.android.diploma.domain.models.VacanciesSearchResult
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyDetails
 import ru.practicum.android.diploma.domain.repository.VacanciesRepository
@@ -23,11 +20,10 @@ class VacanciesRepositoryImpl(
     private val remoteDataSource: VacanciesRemoteDataSource
 ) : VacanciesRepository {
 
-
     override fun searchVacanciesPaged(
         query: String,
         filters: SearchFilters?,
-        onTotalFound : (Int) -> Unit
+        onTotalFound: (Int) -> Unit
     ): Flow<PagingData<Vacancy>> {
         return Pager(
             config = PagingConfig(
