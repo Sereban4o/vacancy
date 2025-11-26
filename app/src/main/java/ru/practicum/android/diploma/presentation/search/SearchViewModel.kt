@@ -43,7 +43,7 @@ class SearchViewModel(
 
     // Основной поток для ui
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    val pagingResultDataFlow: Flow<PagingData<Vacancy>> = searchQueryFlow.debounce (SEARCH_DELAY_MS)
+    val pagingResultDataFlow: Flow<PagingData<Vacancy>> = searchQueryFlow.debounce(SEARCH_DELAY_MS)
         .flatMapLatest { query ->
             if (query.isBlank()) {
                 // Вернём пустой поток при пустом запросе
@@ -52,15 +52,15 @@ class SearchViewModel(
             } else {
                 // Пагинированный поиск через интерактор (пока без фильтров)
                 kotlinx.coroutines.flow.flow { emitAll(
-                searchVacanciesInteractor.searchPaged(
-                    query = query,
-                    filters = null,
-                    onTotalFound =
-                        { total ->
-                            _totalFound.value = total
-                        }
-                )
-                )
+                    searchVacanciesInteractor.searchPaged(
+                        query = query,
+                        filters = null,
+                        onTotalFound =
+                            { total ->
+                                _totalFound.value = total
+                            }
+                        )
+                    )
                 }
             }
         }.cachedIn(viewModelScope)
