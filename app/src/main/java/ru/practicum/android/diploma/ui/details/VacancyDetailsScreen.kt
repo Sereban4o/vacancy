@@ -98,9 +98,9 @@ fun VacancyDetailsContent(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-        //.padding(horizontal = 16.dp)
+        // .padding(horizontal = 16.dp)
     ) {
-        //Spacer(Modifier.height(16.dp))
+        // Spacer(Modifier.height(16.dp))
 
 //        Row(
 //            Modifier.fillMaxWidth(),
@@ -143,7 +143,8 @@ fun VacancyDetailsContent(
                         .clickable(onClick = onBack)
                         .padding(end = 20.dp),
                 )
-            })
+            }
+        )
         Spacer(Modifier.height(16.dp))
 
         Text(
