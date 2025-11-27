@@ -5,7 +5,8 @@
     <string name="mainHeading">Поиск вакансий</string>
     <string name="favorites">Избранное</string>
     <string name="team">Команда</string>
-    <string name="error_network">Проверьте подключение к интернету</string>
+    <string name="error_network">Нет интернета</string>
+    <string name="no_vacancy">Не удалось получить /nсписок вакансий</string>
     <string name="error_general">Произошла ошибка</string>
 
     // Teamscreen
@@ -19,4 +20,12 @@
 
     // MainScreen
     <string name="vacancy_text_placeholder">Введите запрос</string>
+
+    // SearchScreen
+    <string name="vacancy_search_empty">Таких вакансий нет</string>
+    <string name="vacancy_search_found_format">Найдено %d вакансий</string>
+
+    // VacancyScreen
+    <string name="vacancy">Вакансия</string>
+
 </resources>

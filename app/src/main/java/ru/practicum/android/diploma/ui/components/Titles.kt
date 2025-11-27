@@ -14,7 +14,18 @@ import ru.practicum.android.diploma.ui.theme.PaddingSmall
 /**
  * Базовый компонент для всех заголовков.
  *
- * Используется для Heading(), DisplayTitle() и других заголовков.
+ * Через него проходят:
+ *  - Heading()           — основной заголовок экрана (Medium/22)
+ *  - DisplayTitle()      — крупный заголовок (Bold/32)
+ *
+ * Здесь настраиваются:
+ *  - цвет текста        — onBackground
+ *  - ширина             — fillMaxWidth()
+ *  - вертикальные отступы
+ *  - общий стиль передаётся через параметр style
+ *
+ * Этот компонент — универсальный строитель заголовков,
+ * чтобы не дублировать Text() с одинаковой разметкой.
  */
 @Composable
 private fun BaseTitleText(
@@ -36,8 +47,17 @@ private fun BaseTitleText(
 /**
  * Основной заголовок экрана.
  *
- * Это то, что Виталий делал — titleLarge + вертикальный padding.
- * Совпадает поэтому ничего не изменил
+ * Соответствует макету:
+ *  - Medium / 22px / 26px / 0%
+ *  - YS Display (500)
+ *
+ * Применяется на всех обычных экранах:
+ *   — "Поиск"
+ *   — "Избранное"
+ *   — "Команда"  → слово "Команда" наверху
+ *   — "Настройки"
+ *
+ * Это стандартный "title" уровня страницы.
  */
 @Composable
 fun Heading(
@@ -47,14 +67,28 @@ fun Heading(
     BaseTitleText(
         text = text,
         modifier = modifier,
-        style = MaterialTheme.typography.titleLarge,
+        style = MaterialTheme.typography.titleLarge,   // Medium/22
         verticalPadding = PaddingScreenTitleVertical,
     )
 }
 
 /**
- * Более крупный заголовок (используется реже).
- * идет от Сергея
+ * Крупный заголовок.
+ *
+ * Соответствует макету:
+ *  - Bold / 32px / 38px / 0%
+ *  - YS Display (700)
+ *
+ * Используется в двух местах:
+ *   1) Экран "Команда":
+ *        DisplayTitle("Наша команда")
+ *        — это большой подзаголовок под основным.
+ *
+ *   2) Экран "Детали вакансии":
+ *        DisplayTitle(vacancy.title)
+ *        — это главный заголовок вакансии.
+ *
+ * Это "hero title" — для крупных, визуально важных заголовков.
  */
 @Composable
 fun DisplayTitle(
@@ -64,7 +98,7 @@ fun DisplayTitle(
     BaseTitleText(
         text = text,
         modifier = modifier,
-        style = MaterialTheme.typography.displayLarge,
+        style = MaterialTheme.typography.displayLarge, // Bold/32
         verticalPadding = PaddingSmall,
     )
 }

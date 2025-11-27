@@ -29,13 +29,13 @@ val TextSizeDisplayLarge = 32.sp // displayLarge
 
 // Высота строки
 val TextLineHeightSmall = 16.sp
-val TextLineHeightMedium = 24.sp
-val TextLineHeightLarge = 28.sp
+val TextLineHeightMedium = 19.sp
+val TextLineHeightLarge = 26.sp
 val TextLineHeightDisplayLarge = 38.sp
 
 // Межбуквенный интервал
 val TextLetterSpacingSmall = 0.5.sp
-val TextLetterSpacingMedium = 0.5.sp
+val TextLetterSpacingMedium = 0.sp
 val TextLetterSpacingLarge = 0.sp
 
 val PaddingScreenTitleVertical = 20.dp

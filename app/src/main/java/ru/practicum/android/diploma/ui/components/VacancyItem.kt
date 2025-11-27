@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,11 +7,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.domain.models.Vacancy
 
@@ -21,6 +24,7 @@ import ru.practicum.android.diploma.domain.models.Vacancy
  *
  * UI-слой, чистый Compose.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VacancyItem(
     vacancy: Vacancy,
@@ -29,13 +33,18 @@ fun VacancyItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp),
+        shape = RectangleShape,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background   // 🔹 белый / тёмный по теме
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp)
+                .padding(4.dp)
         ) {
             CompanyLogo(
                 logoUrl = vacancy.logoUrl,
@@ -45,17 +54,32 @@ fun VacancyItem(
             Spacer(Modifier.width(12.dp))
 
             Column(Modifier.weight(1f)) {
+
+                val titleText = if (vacancy.city.isNullOrBlank()) {
+                    vacancy.title
+                } else {
+                    "${vacancy.title}, ${vacancy.city}"
+                }
+
+                // заголовок вакансии
                 Text(
-                    text = vacancy.title,
-                    style = MaterialTheme.typography.titleLarge
+                    text = titleText,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
-                Text(
-                    text = formatSalary(vacancy),
-                    style = MaterialTheme.typography.bodyLarge
-                )
+
+                // компания
                 Text(
                     text = vacancy.company,
-                    style = MaterialTheme.typography.labelSmall
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                // зарплата
+                Text(
+                    text = formatSalary(vacancy),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }

@@ -30,10 +30,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -44,10 +43,11 @@ import ru.practicum.android.diploma.presentation.vacancydetails.VacancyDetailsUi
 import ru.practicum.android.diploma.presentation.vacancydetails.VacancyDetailsViewModel
 import ru.practicum.android.diploma.ui.components.formatSalary
 import ru.practicum.android.diploma.ui.theme.CompanyCardBackgroundColor
+import ru.practicum.android.diploma.ui.theme.PaddingScreenHorizontal
+import ru.practicum.android.diploma.ui.theme.PaddingSmall
 
 @Composable
 fun VacancyDetailsScreen(
-//    vacancyId: String,
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
     viewModel: VacancyDetailsViewModel
@@ -96,65 +96,112 @@ fun VacancyDetailsContent(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .padding(horizontal = 16.dp)
     ) {
-        Spacer(Modifier.height(16.dp))
-
+        // ← стрелка ровно на одной линии с остальными элементами
         Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            Modifier
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = onBack) {
+            // 🔹 Кастомная "кнопка" назад: иконка прижата к левому краю 24×24
+            Box(
+                modifier = Modifier
+                    .size(24.dp) // тап-область nButtonкак у Ico
+                    .clickable(onClick = onBack),
+                contentAlignment = Alignment.CenterStart // ИКОНКА У ЛЕВОГО КРАЯ
+            ) {
                 Icon(
-                    painterResource(R.drawable.ic_arrow_back_24),
-                    contentDescription = "Назад"
+                    painter = painterResource(R.drawable.ic_arrow_back_24),
+                    contentDescription = "Назад",
+                    modifier = Modifier.size(24.dp)
                 )
             }
+
+            // зазор
+            Spacer(modifier = Modifier.width(4.dp))
+
+            // Заголовок "Вакансия" как на других экранах (Medium/22)
+            Text(
+                text = stringResource(R.string.vacancy),
+                style = MaterialTheme.typography.titleLarge, // Medium/22
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .weight(1f)
+            )
+
             Row {
                 IconButton(onClick = onShareClick) {
-                    Icon(painterResource(R.drawable.ic_share_24), contentDescription = "Поделиться")
+                    Icon(
+                        painterResource(R.drawable.ic_share_24),
+                        contentDescription = "Поделиться"
+                    )
                 }
-                IconButton(onClick = { /* NOTE Избранное: будет реализовано позже */ }) {
-                    Icon(painterResource(R.drawable.ic_favorites_24), contentDescription = "Избранное")
+                IconButton(onClick = { /* Избранное: позже */ }) {
+                    Icon(
+                        painterResource(R.drawable.ic_favorites_24),
+                        contentDescription = "Избранное"
+                    )
                 }
             }
         }
 
         Spacer(Modifier.height(8.dp))
 
+        // 🔹 Главный заголовок вакансии — Bold/32
         Text(
             text = vacancy.title,
-            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
+            style = MaterialTheme.typography.displayLarge,
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(Modifier.height(8.dp))
 
-        // 💰 Зарплата
+        // 💰 Зарплата — Medium/22
         Text(
             text = formatSalary(vacancy.salaryFrom, vacancy.salaryTo, vacancy.currency),
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(Modifier.height(16.dp))
 
-        // 🏢 Компания
+        // 🏢 Компания + город
         CompanyCard(vacancy)
 
         Spacer(Modifier.height(24.dp))
 
         // 📌 Требуемый опыт
-        Text("Требуемый опыт", fontWeight = FontWeight.Bold)
+        Text(
+            text = "Требуемый опыт",
+            style = MaterialTheme.typography.labelMedium, // Medium/16
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Spacer(Modifier.height(4.dp))
-        vacancy.experience?.let { Text(it) }
+
+        vacancy.experience?.let {
+            Text(
+                text = it,
+                style = MaterialTheme.typography.labelMedium, // Medium/16
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
+
         Spacer(Modifier.height(8.dp))
-        Text("${vacancy.employment}, ${vacancy.schedule}")
+
+        Text(
+            text = "${vacancy.employment}, ${vacancy.schedule}",
+            style = MaterialTheme.typography.bodyMedium, // Regular/16
+            color = MaterialTheme.colorScheme.onBackground
+        )
 
         Spacer(Modifier.height(24.dp))
 
-        // 📝 Описание
-        Text("Описание вакансии", fontWeight = FontWeight.Bold)
+        // 📝 Описание вакансии
+        Text(
+            text = "Описание вакансии",
+            style = MaterialTheme.typography.titleMedium, // Medium/22
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Spacer(Modifier.height(8.dp))
         DescriptionBlock(vacancy.description)
 
@@ -162,10 +209,18 @@ fun VacancyDetailsContent(
 
         // ⭐ Навыки
         if (vacancy.skills.isNotEmpty()) {
-            Text("Ключевые навыки", fontWeight = FontWeight.Bold)
+            Text(
+                text = "Ключевые навыки",
+                style = MaterialTheme.typography.titleMedium, // Medium/22
+                color = MaterialTheme.colorScheme.onBackground
+            )
             Spacer(Modifier.height(8.dp))
             vacancy.skills.forEach {
-                Text("• $it")
+                Text(
+                    text = "• $it",
+                    style = MaterialTheme.typography.bodyMedium, // Regular/16
+                    color = MaterialTheme.colorScheme.onBackground
+                )
                 Spacer(Modifier.height(4.dp))
             }
             Spacer(Modifier.height(24.dp))
@@ -174,10 +229,14 @@ fun VacancyDetailsContent(
         // 📞 Контакты
         vacancy.contacts?.let { contacts ->
             if (contacts.email != null || contacts.phones.isNotEmpty()) {
-                Text("Контакты", fontWeight = FontWeight.Bold)
+                Text(
+                    text = "Контакты",
+                    style = MaterialTheme.typography.titleMedium, // Medium/22
+                    color = MaterialTheme.colorScheme.onBackground
+                )
                 Spacer(Modifier.height(8.dp))
                 ContactsBlock(
-                    contacts,
+                    contacts = contacts,
                     onEmailClick = onEmailClick,
                     onPhoneClick = onPhoneClick
                 )
@@ -211,23 +270,47 @@ fun CompanyCard(vacancy: VacancyDetails) {
         Spacer(Modifier.width(12.dp))
 
         Column {
-            Text(vacancy.companyName, fontWeight = FontWeight.SemiBold)
-            (vacancy.address ?: vacancy.region)?.let { Text(it, color = Color.Gray) }
+            Text(
+                text = vacancy.companyName,
+                style = MaterialTheme.typography.titleMedium, // Medium/22
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            (vacancy.address ?: vacancy.region)?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyMedium, // Regular/16
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }
 
 @Composable
 fun DescriptionBlock(text: String) {
-    text.split("\n").forEach { line ->
-        if (line.startsWith("-") || line.startsWith("•")) {
-            Row {
-                Text("• ")
-                Text(line.removePrefix("-").trim())
-            }
-        } else {
-            Text(line)
+    text.split("\n").forEach { rawLine ->
+        val line = rawLine.trim()
+        if (line.isEmpty()) {
+            Spacer(Modifier.height(4.dp))
+            return@forEach
         }
+
+        Row {
+            Text(
+                text = "• ",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Text(
+                text = line
+                    .removePrefix("•")
+                    .removePrefix("-")
+                    .trimStart(),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
+
         Spacer(Modifier.height(4.dp))
     }
 }
@@ -240,7 +323,8 @@ fun ContactsBlock(
 ) {
     contacts.email?.let {
         Text(
-            it,
+            text = it,
+            style = MaterialTheme.typography.bodyMedium, // Regular/16
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.clickable { onEmailClick(it) }
         )
@@ -249,7 +333,8 @@ fun ContactsBlock(
 
     contacts.phones.forEach { phone ->
         Text(
-            phone,
+            text = phone,
+            style = MaterialTheme.typography.bodyMedium, // Regular/16
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.clickable { onPhoneClick(phone) }
         )
@@ -258,7 +343,11 @@ fun ContactsBlock(
 
     contacts.comment?.let {
         Spacer(Modifier.height(8.dp))
-        Text(it, color = Color.Gray)
+        Text(
+            text = it,
+            style = MaterialTheme.typography.bodyMedium, // Regular/16
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 

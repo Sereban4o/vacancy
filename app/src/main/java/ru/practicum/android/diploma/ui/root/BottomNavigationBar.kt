@@ -24,6 +24,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -44,7 +45,9 @@ fun BottomNavigationBar(navController: NavHostController) {
                 .background(colorResource(R.color.divider))
         )
 
-        BottomAppBar(containerColor = MaterialTheme.colorScheme.background) {
+        BottomAppBar(
+            containerColor = MaterialTheme.colorScheme.background,
+            tonalElevation = 0.dp) {
             Row(
                 horizontalArrangement = Arrangement.SpaceAround,
                 modifier = Modifier.fillMaxWidth()
@@ -122,12 +125,11 @@ fun BottomNavigationItem(
         )
         Text(
             text = label,
-            style = TextStyle(
+            style = MaterialTheme.typography.labelSmall.copy(
                 color = color,
-                fontFamily = FontFamily(Font(R.font.ys_display_regular)),
-                fontWeight = FontWeight.Normal,
-                fontSize = 12.sp
-            )
+                textAlign = TextAlign.Center
+            ),
+            maxLines = 1
         )
     }
 }

@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import retrofit2.HttpException
 import ru.practicum.android.diploma.domain.interactors.SearchVacanciesInteractor
 import ru.practicum.android.diploma.ui.main.SearchErrorType
 import ru.practicum.android.diploma.ui.main.SearchUiState
@@ -44,31 +45,35 @@ class SearchViewModel(
      * Принимает "сырой" текст, как того требует Issue 3.2.
      */
     fun onQueryChanged(newQuery: String) {
+        // просто обновляем текст
         _uiState.update { current ->
             current.copy(
-                query = newQuery,
-                isInitial = false
+                query = newQuery
+                // isInitial тут НЕ трогаем
             )
         }
 
-        // Если строка пустая — просто очищаем результаты и НЕ запускаем поиск.
+        // если строка пустая — вернуться к начальному состоянию с плейсхолдером
         if (newQuery.isBlank()) {
             _uiState.update { current ->
                 current.copy(
+                    isInitial = true,
                     isLoading = false,
                     vacancies = emptyList(),
-                    errorType = SearchErrorType.NONE
+                    errorType = SearchErrorType.NONE,
+                    totalFound = 0
                 )
             }
             return
         }
 
-        // Debounce-поиск
+        // запускаем debounce-поиск; isInitial сменим уже в самом поиске
         searchDebounce(newQuery)
     }
 
     /**
      * Повторить поиск при ошибке (кнопка "Повторить").
+     * она пустая так как нет в ТЗ на эпик 1 и как опция
      */
     fun onRetry() {
         val currentQuery: String = _uiState.value.query
@@ -82,6 +87,7 @@ class SearchViewModel(
         // loading
         _uiState.update { current ->
             current.copy(
+                isInitial = false,
                 isLoading = true,
                 errorType = SearchErrorType.NONE
             )
@@ -109,6 +115,15 @@ class SearchViewModel(
                 current.copy(
                     isLoading = false,
                     errorType = SearchErrorType.NETWORK
+                )
+            }
+        } catch (http: HttpException) {
+            Log.e("SearchViewModel", "Http error while searching vacancies", http)
+
+            _uiState.update { current ->
+                current.copy(
+                    isLoading = false,
+                    errorType = SearchErrorType.GENERAL
                 )
             }
         }
