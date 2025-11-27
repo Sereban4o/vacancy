@@ -57,7 +57,7 @@ fun SearchScreen(
         if (uiState.query.isEmpty()) {
             InfoState(TypeState.SearchVacancy)
         } else {
-            when(pagedData.loadState.refresh) {
+            when (pagedData.loadState.refresh) {
                 is LoadState.Loading -> {
                     Box(
                         modifier = Modifier
@@ -81,7 +81,7 @@ fun SearchScreen(
                 }
                 is LoadState.NotLoading -> {
                     // Заголовок
-                    ShowTotalVacancyNumber(uiState,totalFound)
+                    ShowTotalVacancyNumber(uiState, totalFound)
                     // Если вакансий не нашлось
                     if (pagedData.itemCount == 0 && uiState.query.isNotBlank()) {
                         Box(
@@ -106,7 +106,7 @@ fun SearchScreen(
 
 // Так потом наверное проще будет переделывать
 @Composable
-private fun ShowTotalVacancyNumber(uiState: SearchUiState, totalFound: Int){
+private fun ShowTotalVacancyNumber(uiState: SearchUiState, totalFound: Int) {
     // Количество найденных вакансий
     if (!uiState.isInitial) {
         Text(
