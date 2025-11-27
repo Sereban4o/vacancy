@@ -12,7 +12,6 @@ import coil.request.ImageRequest
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.theme.CornerRadiusMedium
 
-
 /**
  * Картинка логотипа работодателя.
  * Загружается по URL, с плейсхолдером и fallback.

@@ -27,9 +27,9 @@ fun SearchInputField(
 
     // фон поля по ТЗ
     val fieldBackground = if (isDark) {
-        SearchFieldBackgroundDark   // #AEAFB4
+        SearchFieldBackgroundDark // #AEAFB4
     } else {
-        SearchFieldBackgroundLight  // #E6E8EB
+        SearchFieldBackgroundLight // #E6E8EB
     }
     TextField(
         modifier = Modifier.fillMaxWidth(),
@@ -63,7 +63,7 @@ fun SearchInputField(
             cursorColor = MaterialTheme.colorScheme.tertiary,
 
             // 🔘 ФОН ПОЛЯ — #E6E8EB
-            focusedContainerColor = fieldBackground,    // день/ночь разные фоны
+            focusedContainerColor = fieldBackground, // день/ночь разные фоны
             unfocusedContainerColor = fieldBackground,
 
             // плейсхолдер
