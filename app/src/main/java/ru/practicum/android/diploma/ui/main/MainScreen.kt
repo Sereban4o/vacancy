@@ -30,7 +30,7 @@ fun MainScreen(
         ) {
             Heading(
                 text = stringResource(R.string.mainHeading),
-                modifier = Modifier.weight(1f)   // ← заголовок занимает всё слева
+                modifier = Modifier.weight(1f) // ← заголовок занимает всё слева
             )
 
             ActionIcon(
