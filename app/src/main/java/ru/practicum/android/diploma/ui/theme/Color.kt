@@ -18,7 +18,7 @@ val SecondaryLight: Color = Color(0xFF03DAC5) // color_secondary (light)
 val OnSecondaryLight: Color = Color(0xFF000000) // color_on_secondary (light)
 
 val BackgroundLight: Color = Color(0xFFFDFDFD) // = white / bottom_nav_background (light)
-val OnBackgroundLight: Color = Color(0xFF000000)
+val OnBackgroundLight: Color = Color(0xFF1A1B22)
 
 val SurfaceLight: Color = Color(0xFFFFFFFF)
 val OnSurfaceLight: Color = Color(0xFF000000)
@@ -47,6 +47,7 @@ val OnErrorColor: Color = Color(0xFFFFFFFF)
 // ------- Custom component colors -------
 // Цвет фона карточки компании в Vacancy Details Screen
 val CompanyCardBackgroundColor: Color = Color(0xFFF3F3F7)
+val BoxBackground: Color = Color(0xFF3772E7)
 
 // -----------------------------
 // АЛИАСЫ ДЛЯ СОВМЕСТИМОСТИ (старый код)

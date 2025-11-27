@@ -1,7 +1,9 @@
 package ru.practicum.android.diploma.ui.main
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,13 +11,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
+import ru.practicum.android.diploma.ui.components.ChipBox
+import ru.practicum.android.diploma.ui.components.ContentPlaceholder
 import ru.practicum.android.diploma.ui.components.SearchInputField
 import ru.practicum.android.diploma.ui.components.VacancyItem
+import ru.practicum.android.diploma.ui.theme.Spacer12
 
 @Composable
 fun SearchScreen(
@@ -26,7 +32,8 @@ fun SearchScreen(
     val uiState = viewModel.uiState.collectAsState().value
 
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Поле ввода текста
         SearchInputField(
@@ -34,9 +41,24 @@ fun SearchScreen(
             onTextChanged = viewModel::onQueryChanged,
             onClearClick = { viewModel.onQueryChanged("") }
         )
-
+        Spacer(modifier = Modifier.height(Spacer12))
         // Ошибка
         if (uiState.errorType != SearchErrorType.NONE) {
+            when (uiState.errorType) {
+                SearchErrorType.NETWORK -> {
+                    ContentPlaceholder(
+                        imageRes = R.drawable.ic_no_internet,
+                        headlineText = stringResource(R.string.network_error_headline)
+                    )
+                }
+                SearchErrorType.GENERAL -> {
+                    ContentPlaceholder(
+                        imageRes = R.drawable.ic_no_found,
+                        headlineText = stringResource(R.string.no_vacancies_error_headline)
+                    )
+                }
+                else -> {}
+            }
             Text(
                 text = when (uiState.errorType) {
                     SearchErrorType.NETWORK ->
@@ -52,14 +74,16 @@ fun SearchScreen(
 
         // Количество найденных вакансий
         if (!uiState.isInitial) {
-            Text(
-                text = "Найдено ${uiState.totalFound} вакансий",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.padding(
-                    horizontal = 16.dp,
-                    vertical = 8.dp
-                )
+            ChipBox(
+                text = if (uiState.totalFound == 0) {
+                    stringResource(R.string.no_vacancies)
+                } else {
+                    stringResource(R.string.vacancies_found, uiState.totalFound)
+                }
+            )
+        } else {
+            ContentPlaceholder(
+                imageRes = R.drawable.ic_no_content,
             )
         }
 

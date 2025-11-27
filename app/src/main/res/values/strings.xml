@@ -19,4 +19,10 @@
 
     // MainScreen
     <string name="vacancy_text_placeholder">Введите запрос</string>
+
+    // SearchScreen
+    <string name="no_vacancies">Таких вакансий нет</string>
+    <string name="vacancies_found">Найдено %1$d вакансий</string>
+    <string name="network_error_headline">Нет интернета</string>
+    <string name="no_vacancies_error_headline">Не удалось получить список вакансий</string>
 </resources>
