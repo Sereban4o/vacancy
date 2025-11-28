@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import ru.practicum.android.diploma.domain.interactors.VacancyDetailsInteractor
 import java.io.IOException
+import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
 class VacancyDetailsViewModel(
     private val vacancyId: String,
@@ -44,17 +45,13 @@ class VacancyDetailsViewModel(
                 // 🌐 HTTP-ошибки (4xx/5xx)
                 Log.e(TAG, "ОШИБКА HTTP ${e.code()}: ${e.message()}", e)
 
-                if (e.code() == 404) {
+                if (e.code() == HTTP_NOT_FOUND) {
                     // 🧩 Вакансия не найдена / удалена
                     _uiState.value = VacancyDetailsUiState.NoVacancy
                 } else {
                     // Остальные HTTP-ошибки → общий серверный плейсхолдер
                     _uiState.value = VacancyDetailsUiState.Error(isNetworkError = false)
                 }
-            } catch (e: Exception) {
-                // На всякий пожарный: если вдруг прилетит что-то ещё
-                Log.e(TAG, "НЕИЗВЕСТНАЯ ОШИБКА: ${e.message}", e)
-                _uiState.value = VacancyDetailsUiState.Error(isNetworkError = false)
             }
         }
     }
@@ -62,5 +59,4 @@ class VacancyDetailsViewModel(
     companion object {
         private const val TAG = "VacancyDetailsViewModel"
     }
-
 }

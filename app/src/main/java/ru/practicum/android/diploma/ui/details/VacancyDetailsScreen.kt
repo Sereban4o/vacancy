@@ -99,7 +99,7 @@ fun VacancyDetailsScreen(
                         )
                     }
 
-                    IconButton(onClick = { /* TODO: избранное */ }) {
+                    IconButton(onClick = { /* NOTE : избранное */ }) {
                         Icon(
                             painterResource(R.drawable.ic_favorites_22_20),
                             contentDescription = "Избранное",
