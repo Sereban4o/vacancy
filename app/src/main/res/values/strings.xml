@@ -8,7 +8,6 @@
     <string name="vacancy">Вакансия</string>
     <string name="error_network">Проверьте подключение к интернету</string>
     <string name="error_general">Произошла ошибка</string>
-    <string name="found_vacancies">Найдено %d вакансий</string>
 
     <string name="no_internet">Нет интернета</string>
     <string name="no_data_vacancy">Не удалось получить список вакансий</string>
@@ -33,6 +32,4 @@
     // SearchScreen
     <string name="no_vacancies">Таких вакансий нет</string>
     <string name="vacancies_found">Найдено %1$d вакансий</string>
-    <string name="network_error_headline">Нет интернета</string>
-    <string name="no_vacancies_error_headline">Не удалось получить список вакансий</string>
 </resources>
