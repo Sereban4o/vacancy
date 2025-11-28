@@ -35,32 +35,28 @@ class VacancyDetailsViewModel(
 
             try {
                 // 1️⃣ Выбираем источник данных
-                val vacancy: VacancyDetails = if (fromApi) {
+                val vacancy: VacancyDetails? = if (fromApi) {
                     // открыли из поиска → идём в API
-                    interactor.getVacancyDetails(vacancyId)
+                    interactor.getVacancyDetails(vacancyId) // не null
                 } else {
                     // Открыли из избранного → берём из локальной БД
-                    val fromDb = favoritesInteractor.getVacancyDetailsFromDb(vacancyId)
-
-                    if (fromDb == null) {
-                        // В БД ничего не нашли → показываем плейсхолдер "вакансии нет"
-                        _uiState.value = VacancyDetailsUiState.NoVacancy
-                        return@launch
-                    }
-
-                    fromDb
+                    favoritesInteractor.getVacancyDetailsFromDb(vacancyId) // может быть null
                 }
 
-                // 2️⃣ Проверяем, в избранном ли эта вакансия
-                val isFavorite = favoritesInteractor.checkFavorite(vacancyId)
+                // 2️⃣ Если из БД ничего не нашли → показываем NoVacancy
+                if (vacancy == null) {
+                    _uiState.value = VacancyDetailsUiState.NoVacancy
+                } else {
+                    // 3️⃣ Иначе — обычный успешный сценарий
+                    val isFavorite = favoritesInteractor.checkFavorite(vacancyId)
 
-                Log.d(TAG, "УСПЕХ: получили VacancyDetails: $vacancy")
+                    Log.d(TAG, "УСПЕХ: получили VacancyDetails: $vacancy, isFavorite=$isFavorite")
 
-                // 3️⃣ Отдаём контент в UI
-                _uiState.value = VacancyDetailsUiState.Content(
-                    vacancy = vacancy,
-                    isFavorite = isFavorite
-                )
+                    _uiState.value = VacancyDetailsUiState.Content(
+                        vacancy = vacancy,
+                        isFavorite = isFavorite
+                    )
+                }
 
             } catch (e: IOException) {
                 // 🔌 Нет интернета / проблемы с сетью (актуально при fromApi = true)

@@ -24,7 +24,6 @@ val viewModelModule = module {
         )
     }
 
-
     viewModel {
         FavoritesViewModel(
             get(),
