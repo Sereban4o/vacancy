@@ -36,7 +36,6 @@ class VacancyDetailsViewModel(
 
                 Log.d(TAG, "УСПЕХ: получили VacancyDetails: $vacancy")
 
-
                 _uiState.value = VacancyDetailsUiState.Content(
                     vacancy,
                     vacancyId.let {
