@@ -139,7 +139,6 @@ fun SearchScreen(
                 }
             }
         }
-    }
 
         // 🔹 Чип поверх списка — как в старой реализации
         if (!uiState.isInitial && (uiState.totalFound > 0 || noResults)) {
@@ -160,7 +159,7 @@ fun SearchScreen(
                 Surface(
                     modifier = baseModifier,
                     shape = RoundedCornerShape(16.dp),
-                    color = MaterialTheme.colorScheme.tertiary,
+                    color = MaterialTheme.colorScheme.tertiary
                 ) {
                     Text(
                         text = stringResource(R.string.vacancy_search_empty),
@@ -228,19 +227,5 @@ private fun PagedVacanciesList(
                 )
             }
         }
-
-        if (pagedData.loadState.append is LoadState.Loading) {
-            item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-        }
     }
 }
-
