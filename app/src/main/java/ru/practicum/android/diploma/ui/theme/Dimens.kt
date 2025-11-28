@@ -9,6 +9,7 @@ val PaddingSmall = 8.dp
 val Padding12 = 12.dp
 val PaddingMedium = 16.dp
 val PaddingLarge = 24.dp
+val PaddingExtraLarge = 46.dp
 val PaddingScreenHorizontal = 16.dp
 
 // ---------- Радиусы ----------
