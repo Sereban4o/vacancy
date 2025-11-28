@@ -44,7 +44,7 @@ fun NavGraph(
 
         // 👥 Команда
         composable(Routes.Team.name) {
-            TeamScreen(Modifier)
+            TeamScreen()
         }
 
         // 📄 Детали вакансии
