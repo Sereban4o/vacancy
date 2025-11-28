@@ -113,7 +113,7 @@ fun VacancyDetailsContent(
                 Box(
                     modifier = Modifier
                         .size(24.dp)
-                        .padding(end = 4.dp)// область как у IconButton
+                        .padding(end = 4.dp) // область как у IconButton
                         .clickable(onClick = onBack),
                     contentAlignment = Alignment.CenterStart // ИКОНКА У ЛЕВОГО КРАЯ бокса
                 ) {
