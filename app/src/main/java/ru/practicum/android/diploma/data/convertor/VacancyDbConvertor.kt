@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.data.convertor
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
@@ -62,7 +63,12 @@ class VacancyDbConvertor {
         return try {
             gson.fromJson(json, VacancyContacts::class.java)
         } catch (e: JsonSyntaxException) {
+            Log.e(TAG, "Error parsing contacts json: $json", e)
             null
         }
+    }
+
+    companion object {
+        private const val TAG = "VacancyDbConvertor"
     }
 }

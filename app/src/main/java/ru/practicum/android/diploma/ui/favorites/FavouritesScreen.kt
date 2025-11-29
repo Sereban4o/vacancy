@@ -90,7 +90,7 @@ private fun HistoryVacancyList(
             key = { index -> historyData.vacancy[index].id }
         ) { index ->
             val vacancyDetails = historyData.vacancy[index]
-            val vacancy = Vacancy (
+            val vacancy = Vacancy(
                 id = vacancyDetails.id,
                 title = vacancyDetails.title,
                 company = vacancyDetails.companyName,

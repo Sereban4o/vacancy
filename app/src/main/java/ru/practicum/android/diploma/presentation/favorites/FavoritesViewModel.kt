@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.interactors.FavoritesInteractor
 import ru.practicum.android.diploma.domain.models.VacancyDetails
@@ -27,14 +28,14 @@ class FavoritesViewModel(
             // Можно не ставить Loading тут, он уже стартовый,
             renderState(FavoritesState.Loading)
 
-            try {
-                favoritesInteractor.getFavorites().collect { vacancies ->
+            favoritesInteractor.getFavorites()
+                .catch { e ->
+                    e.printStackTrace()
+                    renderState(FavoritesState.Error)
+                }
+                .collect { vacancies ->
                     processResult(vacancies)
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                renderState(FavoritesState.Error)
-            }
         }
     }
 
