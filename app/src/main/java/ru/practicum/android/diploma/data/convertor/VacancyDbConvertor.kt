@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.data.convertor
 
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import ru.practicum.android.diploma.data.db.VacancyEntity
 import ru.practicum.android.diploma.domain.models.VacancyContacts
@@ -60,7 +61,7 @@ class VacancyDbConvertor {
 
         return try {
             gson.fromJson(json, VacancyContacts::class.java)
-        } catch (e: Exception) {
+        } catch (e: JsonSyntaxException) {
             null
         }
     }

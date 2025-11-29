@@ -41,7 +41,7 @@ fun FavouritesScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-    ){
+    ) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -49,7 +49,7 @@ fun FavouritesScreen(
                 text = stringResource(R.string.favorites),
                 modifier = modifier
             )
-            when(val currentState = state.value){
+            when (val currentState = state.value) {
                 is FavoritesState.Loading -> {
                     ShowProgressBar()
                 }
@@ -63,7 +63,7 @@ fun FavouritesScreen(
                         onVacancyClick = onVacancyClick
                     )
                 }
-                is FavoritesState.Error ->{
+                is FavoritesState.Error -> {
                     InfoState(state = TypeState.NoDataVacancy)
                 }
             }
@@ -90,7 +90,7 @@ private fun HistoryVacancyList(
             key = { index -> historyData.vacancy[index].id }
         ) { index ->
             val vacancyDetails = historyData.vacancy[index]
-            val vacancy = Vacancy(
+            val vacancy = Vacancy (
                 id = vacancyDetails.id,
                 title = vacancyDetails.title,
                 company = vacancyDetails.companyName,
@@ -100,14 +100,16 @@ private fun HistoryVacancyList(
                 currency = vacancyDetails.currency,
                 city = vacancyDetails.region
             )
-            VacancyItem(vacancy = vacancy, onClick = { onVacancyClick(vacancy.id) }
+            VacancyItem(
+                vacancy = vacancy,
+                onClick = { onVacancyClick(vacancy.id) }
             )
         }
     }
 }
 
 @Composable
-fun ShowProgressBar(){
+fun ShowProgressBar() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
