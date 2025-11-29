@@ -25,12 +25,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -39,12 +39,14 @@ import coil.request.ImageRequest
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.models.VacancyContacts
 import ru.practicum.android.diploma.domain.models.VacancyDetails
+import ru.practicum.android.diploma.presentation.vacancydetails.VacancyDetailsEvent
 import ru.practicum.android.diploma.presentation.vacancydetails.VacancyDetailsUiState
 import ru.practicum.android.diploma.presentation.vacancydetails.VacancyDetailsViewModel
 import ru.practicum.android.diploma.ui.components.Heading
 import ru.practicum.android.diploma.ui.components.InfoState
 import ru.practicum.android.diploma.ui.components.formatSalary
 import ru.practicum.android.diploma.ui.theme.CompanyCardBackgroundColor
+import ru.practicum.android.diploma.ui.theme.FavoriteActive
 import ru.practicum.android.diploma.ui.theme.TextColorLight
 import ru.practicum.android.diploma.util.TypeState
 
@@ -56,6 +58,17 @@ fun VacancyDetailsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
+
+    // 🔥 Слушаем события из ViewModel (одноразовые action'ы)
+    LaunchedEffect(viewModel) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is VacancyDetailsEvent.Share -> shareVacancy(context, event.url)
+                is VacancyDetailsEvent.Email -> openEmail(context, event.email)
+                is VacancyDetailsEvent.Call -> openPhone(context, event.phone)
+            }
+        }
+    }
 
     // 🧩 Шапка экрана
     Column(
@@ -91,7 +104,8 @@ fun VacancyDetailsScreen(
                     IconButton(
                         onClick = {
                             vacancy?.let {
-                                shareVacancy(context, it.vacancyUrl)
+                                // ❗️ вместо прямого вызова shareVacancy(...)
+                                viewModel.onShareClick(it.vacancyUrl)
                             }
                         },
                         enabled = vacancy != null
@@ -111,9 +125,10 @@ fun VacancyDetailsScreen(
                     }
 
                     val favoriteTint = if (isFavorite) {
-                        colorResource(R.color.is_favorite_color)
+                        FavoriteActive // розовый
                     } else {
-                        colorResource(R.color.favorite_color)
+                        MaterialTheme.colorScheme.onBackground
+                        // было favorite_color: чёрный/белый
                     }
 
                     IconButton(
@@ -177,8 +192,9 @@ fun VacancyDetailsScreen(
                 val vacancy = (uiState as VacancyDetailsUiState.Content).vacancy
                 VacancyDetailsContent(
                     vacancy = vacancy,
-                    onEmailClick = { email -> openEmail(context, email) },
-                    onPhoneClick = { phone -> openPhone(context, phone) },
+                    // ❗️Передаём не прямые openEmail/openPhone, а вызовы ViewModel
+                    onEmailClick = { email -> viewModel.onEmailClick(email) },
+                    onPhoneClick = { phone -> viewModel.onPhoneClick(phone) },
                     modifier = modifier
                 )
             }
@@ -403,7 +419,7 @@ fun ContactsBlock(
     }
 }
 
-fun shareVacancy(context: Context, url: String) {
+private fun shareVacancy(context: Context, url: String) {
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
         putExtra(Intent.EXTRA_TEXT, url)
@@ -417,13 +433,13 @@ fun shareVacancy(context: Context, url: String) {
 }
 
 @SuppressLint("UseKtx")
-fun openEmail(context: Context, email: String) {
+private fun openEmail(context: Context, email: String) {
     val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$email"))
     context.startActivity(intent)
 }
 
 @SuppressLint("UseKtx")
-fun openPhone(context: Context, phone: String) {
+private fun openPhone(context: Context, phone: String) {
     val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phone"))
     context.startActivity(intent)
 }
