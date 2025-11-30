@@ -3,8 +3,8 @@ package ru.practicum.android.diploma.ui.favorites
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.data.mappers.toShortVacancy
 import ru.practicum.android.diploma.domain.state.FavoritesState
 import ru.practicum.android.diploma.presentation.favorites.FavoritesViewModel
 import ru.practicum.android.diploma.ui.components.CenteredProgress
@@ -22,7 +23,6 @@ import ru.practicum.android.diploma.ui.components.InfoState
 import ru.practicum.android.diploma.ui.components.ScreenScaffold
 import ru.practicum.android.diploma.ui.components.VacancyItem
 import ru.practicum.android.diploma.util.TypeState
-import ru.practicum.android.diploma.data.mappers.toShortVacancy // 🔁 маппер VacancyDetails -> Vacancy
 
 @Composable
 fun FavouritesScreen(
