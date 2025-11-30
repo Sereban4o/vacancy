@@ -109,8 +109,8 @@ fun SearchScreen(
                     InfoState(TypeState.ServerError)
                 }
 
-                // 4️⃣ Загрузка первой страницы — пока список пустой
-                uiState.isLoading && pagedData.itemCount == 0 -> {
+                // 4️⃣ Загрузка страницы
+                uiState.isLoading && uiState.query.isNotEmpty()-> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
