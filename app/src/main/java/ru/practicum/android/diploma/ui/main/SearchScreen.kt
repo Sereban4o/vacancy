@@ -102,7 +102,7 @@ fun SearchScreen(
                 } // 3️⃣ Ошибка — сервер
 
                 // 4️⃣ Загрузка страницы
-                uiState.isLoading && uiState.query.isNotEmpty()-> {
+                uiState.isLoading && uiState.query.isNotEmpty() -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
