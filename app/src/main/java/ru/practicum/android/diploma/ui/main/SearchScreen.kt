@@ -114,7 +114,7 @@ fun SearchScreen(
             }
         },
         overlay = { // 🔹 Чип поверх списка
-            if (!uiState.isInitial && (uiState.totalFound > 0 || noResults)) {
+            if (getEmptyResult(uiState, noResults)) {
                 val baseModifier = Modifier
                     .align(Alignment.TopCenter)
                     .padding(top = chipTopOffsetState.value)
@@ -197,10 +197,20 @@ private fun PagedVacanciesList(
     }
 }
 
-private fun getNoResult(uiState: SearchUiState, pagedData: LazyPagingItems<Vacancy>): Boolean {
+private fun getNoResult(
+    uiState: SearchUiState,
+    pagedData: LazyPagingItems<Vacancy>
+): Boolean {
     return !uiState.isInitial &&
         !uiState.isLoading &&
         uiState.errorType == SearchErrorType.NONE &&
         pagedData.itemCount == 0 &&
         pagedData.loadState.refresh is LoadState.NotLoading
+}
+
+private fun getEmptyResult(
+    uiState: SearchUiState,
+    noResults: Boolean
+): Boolean {
+    return !uiState.isInitial && (uiState.totalFound > 0 || noResults)
 }
