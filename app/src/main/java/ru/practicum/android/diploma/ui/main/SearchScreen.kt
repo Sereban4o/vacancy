@@ -92,7 +92,8 @@ fun SearchScreen(
                         topPadding = chipHeightState.value + 8.dp,
                         onVacancyClick = onVacancyClick
                     )
-                })
+                }
+            )
         },
         overlay = { // 🔹 Чип поверх списка
             if (getEmptyResult(uiState, noResults)) {
