@@ -83,35 +83,16 @@ fun SearchScreen(
             }
         },
         content = {
-            when { // 🔥 БЛОК СОСТОЯНИЙ ЭКРАНА
-                uiState.isInitial -> { // 1️⃣ Первый запуск
-                    InfoState(TypeState.SearchVacancy)
-                }
-
-                uiState.errorType == SearchErrorType.NETWORK -> {
-                    InfoState(TypeState.NoInternet)
-                } // 2️⃣ Ошибка — нет интернета
-
-                uiState.errorType == SearchErrorType.GENERAL -> {
-                    InfoState(TypeState.ServerError)
-                } // 3️⃣ Ошибка — сервер
-
-                uiState.isLoading && uiState.query.isNotEmpty() -> {
-                    FullscreenProgress()
-                } // 4️⃣ Загрузка первой страницы — пока список пустой
-
-                noResults -> { // 5️⃣ Вакансий нет
-                    InfoState(TypeState.NoDataVacancy)
-                }
-
-                else -> { // 6️⃣ Список вакансий (Paging 3)
+            GetContent(
+                uiState,
+                noResults,
+                {
                     PagedVacanciesList(
                         pagedData = pagedData,
                         topPadding = chipHeightState.value + 8.dp,
                         onVacancyClick = onVacancyClick
                     )
-                }
-            }
+                })
         },
         overlay = { // 🔹 Чип поверх списка
             if (getEmptyResult(uiState, noResults)) {
@@ -213,4 +194,37 @@ private fun getEmptyResult(
     noResults: Boolean
 ): Boolean {
     return !uiState.isInitial && (uiState.totalFound > 0 || noResults)
+}
+
+@Composable
+private fun GetContent(
+    uiState: SearchUiState,
+    noResults: Boolean,
+    pageVacancyList: (@Composable () -> Unit)
+) {
+    when { // 🔥 БЛОК СОСТОЯНИЙ ЭКРАНА
+        uiState.isInitial -> { // 1️⃣ Первый запуск
+            InfoState(TypeState.SearchVacancy)
+        }
+
+        uiState.errorType == SearchErrorType.NETWORK -> {
+            InfoState(TypeState.NoInternet)
+        } // 2️⃣ Ошибка — нет интернета
+
+        uiState.errorType == SearchErrorType.GENERAL -> {
+            InfoState(TypeState.ServerError)
+        } // 3️⃣ Ошибка — сервер
+
+        uiState.isLoading && uiState.query.isNotEmpty() -> {
+            FullscreenProgress()
+        } // 4️⃣ Загрузка первой страницы — пока список пустой
+
+        noResults -> { // 5️⃣ Вакансий нет
+            InfoState(TypeState.NoDataVacancy)
+        }
+
+        else -> { // 6️⃣ Список вакансий (Paging 3)
+            pageVacancyList.invoke()
+        }
+    }
 }
