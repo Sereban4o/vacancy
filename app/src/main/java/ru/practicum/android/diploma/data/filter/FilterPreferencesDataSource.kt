@@ -1,11 +1,12 @@
 package ru.practicum.android.diploma.data.filter
 
 import android.content.SharedPreferences
+import android.util.Log
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import ru.practicum.android.diploma.domain.models.FilterSettings
 import androidx.core.content.edit
+import kotlinx.serialization.SerializationException
 
 /**
  * SharedPreferences-слой, но используем kotlinx.serialization вместо Gson.
@@ -13,14 +14,9 @@ import androidx.core.content.edit
 class FilterPreferencesDataSource(
     private val sharedPreferences: SharedPreferences,
 ) {
-
-    companion object {
-        private const val KEY_FILTER_SETTINGS = "filter_settings_json"
-    }
-
     private val json = Json {
         prettyPrint = false
-        ignoreUnknownKeys = true   // важно при обновлении версии
+        ignoreUnknownKeys = true // важно при обновлении версии
         encodeDefaults = true
     }
 
@@ -30,7 +26,13 @@ class FilterPreferencesDataSource(
 
         return try {
             json.decodeFromString<FilterSettings>(stored)
-        } catch (e: Exception) {
+        } catch (e: SerializationException) {
+            // JSON есть, но структура не совпадает с FilterSettings
+            Log.w(TAG, "Failed to parse FilterSettings from JSON, clearing saved filter", e)
+            null
+        } catch (e: IllegalArgumentException) {
+            // В строке вообще невалидный JSON
+            Log.w(TAG, "Invalid JSON stored for FilterSettings, clearing saved filter", e)
             null
         }
     }
@@ -46,5 +48,10 @@ class FilterPreferencesDataSource(
         sharedPreferences.edit() {
             remove(KEY_FILTER_SETTINGS)
         }
+    }
+
+    companion object {
+        private const val KEY_FILTER_SETTINGS = "filter_settings_json"
+        private const val TAG = "FilterPreferences"
     }
 }
