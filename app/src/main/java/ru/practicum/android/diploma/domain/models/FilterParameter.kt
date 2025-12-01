@@ -5,6 +5,6 @@ package ru.practicum.android.diploma.domain.models
  * Это прямой аналог "parameters(id, name)" из задачи.
  */
 data class FilterParameter(
-    val id: String,   // ID, который уходит в API
+    val id: String, // ID, который уходит в API
     val name: String, // Человекочитаемое имя, которое показываем в UI
 )

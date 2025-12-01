@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.domain.repositories
+package ru.practicum.android.diploma.domain.repository
 
 import ru.practicum.android.diploma.domain.models.FilterSettings
 

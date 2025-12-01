@@ -3,6 +3,8 @@ package ru.practicum.android.diploma.data.filter
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.google.gson.JsonIOException
+import com.google.gson.JsonSyntaxException
 import ru.practicum.android.diploma.domain.models.FilterSettings
 
 /**
@@ -31,7 +33,11 @@ class FilterPreferencesDataSource(
 
         return try {
             gson.fromJson(json, FilterSettings::class.java)
-        } catch (e: Exception) {
+        } catch (e: JsonSyntaxException) {
+            // некорректный / устаревший JSON → считаем, что настроек нет
+            null
+        } catch (e: JsonIOException) {
+            // проблемы чтения → тоже возвращаем "нет настроек"
             null
         }
     }
