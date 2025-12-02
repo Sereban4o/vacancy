@@ -17,6 +17,7 @@ import ru.practicum.android.diploma.ui.team.TeamScreen
 import ru.practicum.android.diploma.ui.favorites.FavouritesScreen
 import ru.practicum.android.diploma.util.Routes
 import ru.practicum.android.diploma.ui.details.VacancyDetailsScreen
+import ru.practicum.android.diploma.ui.industry.IndustryScreen
 
 @Composable
 fun NavGraph(
@@ -32,7 +33,11 @@ fun NavGraph(
         // 🟦 Главный экран
         composable(Routes.Main.name) {
             MainScreen(
-                onFilterClick = { /* откроем фильтры позже */ },
+//                onFilterClick = { /* откроем фильтры позже */ },
+                onFilterClick = {
+                    // ⬇️ ВРЕМЕННО прямо отсюда идём на экран отраслей
+                    navHostController.navigate("industry")
+                },
                 onVacancyClick = { id ->
                     // из поиска → fromApi = true (по умолчанию в VM)
                     navHostController.navigateToVacancyDetails(
@@ -40,6 +45,13 @@ fun NavGraph(
                         fromApi = true
                     )
                 }
+            )
+        }
+
+        // 🔹 ЭКРАН ВЫБОРА ОТРАСЛИ
+        composable("industry") {
+            IndustryScreen(
+                onBack = { navHostController.popBackStack() }
             )
         }
 

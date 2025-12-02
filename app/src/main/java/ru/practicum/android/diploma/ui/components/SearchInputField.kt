@@ -22,7 +22,8 @@ import ru.practicum.android.diploma.ui.theme.TextColorDark
 fun SearchInputField(
     query: String,
     onTextChanged: (String) -> Unit,
-    onClearClick: () -> Unit
+    onClearClick: () -> Unit,
+    placeholderText: String = stringResource(R.string.vacancy_text_placeholder),
 ) {
     val isDark = isSystemInDarkTheme()
 
@@ -50,7 +51,7 @@ fun SearchInputField(
 
         placeholder = {
             Text(
-                text = stringResource(R.string.vacancy_text_placeholder),
+                text = placeholderText,
                 style = MaterialTheme.typography.bodyLarge,
                 color = placeholderColor
             )
