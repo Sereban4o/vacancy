@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.industry
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -7,10 +8,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import ru.practicum.android.diploma.domain.interactors.FilterSettingsInteractor
 import ru.practicum.android.diploma.domain.interactors.IndustriesInteractor
 import ru.practicum.android.diploma.domain.models.FilterParameter
 import ru.practicum.android.diploma.domain.models.FilterSettings
+import java.io.IOException
 
 class IndustryViewModel(
     private val industriesInteractor: IndustriesInteractor,
@@ -43,12 +46,21 @@ class IndustryViewModel(
                     it.copy(
                         isLoading = false,
                         isError = false,
-                        industries = fullList,       // пока без поиска
+                        industries = fullList, // пока без поиска
                         selectedIndustryId = selectedId
                     )
                 }
-            } catch (e: Exception) {
+            } catch (e: IOException) {
                 // по ТЗ: показать сообщение об ошибке
+                Log.w(TAG, "Failed to load industries (network error)", e)
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        isError = true
+                    )
+                }
+            } catch (e: HttpException) {
+                Log.w(TAG, "Failed to load industries (http error)", e)
                 _uiState.update {
                     it.copy(
                         isLoading = false,
@@ -112,9 +124,17 @@ class IndustryViewModel(
      */
     suspend fun applySelection(): Boolean {
         val state = _uiState.value
-        val selectedId = state.selectedIndustryId ?: return false
+        val selectedId = state.selectedIndustryId
 
-        val selected = fullList.firstOrNull { it.id == selectedId } ?: return false
+        // Находим выбранную отрасль, если id есть
+        val selected = selectedId?.let { id ->
+            fullList.firstOrNull { it.id == id }
+        }
+
+        // Если ничего не нашли — ничего не сохраняем
+        if (selected == null) {
+            return false
+        }
 
         val current = filterSettingsInteractor.getFilterSettings()
         val updated = current.copy(
@@ -136,4 +156,7 @@ class IndustryViewModel(
         return true
     }
 
+    companion object {
+        private const val TAG = "IndustryViewModel"
+    }
 }
