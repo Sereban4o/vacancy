@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.data.network
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -21,6 +22,8 @@ class VacanciesRemoteDataSourceImpl(
         request: VacancySearchRequestDto
     ): VacancySearchResponseDto = withContext(ioDispatcher) {
         val params = mutableMapOf<String, String>()
+
+        Log.d("FILTER_CHAIN", "Remote → sending request = $request")
 
         // обязательные
         params["text"] = request.text

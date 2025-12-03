@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.presentation.workplace
+package ru.practicum.android.diploma.presentation.filter.workplace
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

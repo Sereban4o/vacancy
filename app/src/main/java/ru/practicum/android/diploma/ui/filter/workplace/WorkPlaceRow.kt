@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.ui.workplace
+package ru.practicum.android.diploma.ui.filter.workplace
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -24,19 +24,19 @@ fun WorkPlaceRow(
     titleRes: Int, // R.string.country / R.string.region
     value: String?, // null -> не выбран
     onRowClick: () -> Unit, // переход на экран выбора
-    onClearClick: () -> Unit
+    onClearClick: () -> Unit // очистка выбранного значения
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onRowClick)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            // Подпись "Страна"/"Регион"
+            // подпись ("Место работы" / "Отрасль" / "Страна" / "Регион")
             val labelColor = if (value == null) {
                 SearchFieldBackgroundDark // серый, как в макете
             } else {
@@ -64,9 +64,9 @@ fun WorkPlaceRow(
         //  - если НЕ выбрано → стрелка
         //  - если выбрано → крестик (очистить)
         val iconRes = if (value == null) {
-            R.drawable.arrow_forward_24px
+            R.drawable.arrow_forward_24px // ничего не выбрано → стрелка
         } else {
-            R.drawable.ic_clear_24
+            R.drawable.ic_clear_24 // выбрано → крестик (очистить)
         }
 
         Icon(
@@ -75,6 +75,10 @@ fun WorkPlaceRow(
             tint = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .padding(start = 8.dp)
+                .clickable(enabled = value != null) {
+                    // 🔹 если есть значение → кликаем по крестику → очистка
+                    onClearClick()
+                }
         )
     }
 }

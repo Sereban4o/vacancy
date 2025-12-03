@@ -61,4 +61,17 @@
     <!-- CountryScreen -->
     <string name="country_title">Выбор страны</string>
 
+    <!-- RegionScreen -->
+    <string name="region_title">Выбор региона</string>
+    <string name="region_search_hint">Введите регион</string>э
+
+    <!-- FilterSettingsScreen -->
+    <string name="filter_title">Настройки фильтрации</string>
+    <string name="hide_without_salary">Не показывать без зарплаты</string>
+    <string name="industry">Отрасль</string>
+    <string name="salary_hint">Введите сумму</string>
+    <string name="expected_salary">Ожидаемая зарплата</string>
+    <string name="apply">Применить</string>
+    <string name="reset">Сбросить</string>
+
 </resources>

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,6 +29,12 @@ fun MainScreen(
 ) {
     val searchViewModel: SearchViewModel = koinViewModel()
     val uiState = searchViewModel.uiState.collectAsState().value
+
+    // 🔹 КАЖДЫЙ раз, когда MainScreen попадает в композицию (в т.ч. после popBackStack с фильтра),
+    // подтягиваем актуальное состояние фильтра из хранилища
+    LaunchedEffect(Unit) {
+        searchViewModel.refreshFilterState()
+    }
 
     Column(modifier = modifier.fillMaxSize()) {
         Heading(

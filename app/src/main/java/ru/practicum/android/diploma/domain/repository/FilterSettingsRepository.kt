@@ -1,26 +1,16 @@
 package ru.practicum.android.diploma.domain.repository
 
+import kotlinx.coroutines.flow.StateFlow
 import ru.practicum.android.diploma.domain.models.FilterSettings
 
-/**
- * Интерфейс репозитория для работы с настройками фильтра.
- * Он живёт в domain-слое и НЕ зависит от способа сериализации (Gson / kotlinx.serialization / что угодно).
- */
 interface FilterSettingsRepository {
 
-    /**
-     * Прочитать сохранённые настройки фильтра.
-     * Если ничего нет, вернуть объект FilterSettings() по умолчанию.
-     */
+    /** Единоразовое чтение (там, где нужно suspend-API) */
     suspend fun getFilterSettings(): FilterSettings
 
-    /**
-     * Сохранить настройки фильтра.
-     */
+    /** Сохранение настроек */
     suspend fun saveFilterSettings(settings: FilterSettings)
 
-    /**
-     * Полностью сбросить настройки (как будто фильтр не настроен).
-     */
+    /** Полный сброс фильтров */
     suspend fun clearFilterSettings()
 }

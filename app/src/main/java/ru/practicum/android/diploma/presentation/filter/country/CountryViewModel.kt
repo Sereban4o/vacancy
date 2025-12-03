@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.presentation.country
+package ru.practicum.android.diploma.presentation.filter.country
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

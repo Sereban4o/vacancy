@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.ui.components
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -11,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.theme.CornerRadiusLarge
 import ru.practicum.android.diploma.ui.theme.SearchFieldBackgroundDark
@@ -24,6 +26,7 @@ fun SearchInputField(
     onTextChanged: (String) -> Unit,
     onClearClick: () -> Unit,
     placeholderText: String = stringResource(R.string.vacancy_text_placeholder),
+    keyboardType: KeyboardType = KeyboardType.Text,
 ) {
     val isDark = isSystemInDarkTheme()
 
@@ -93,6 +96,7 @@ fun SearchInputField(
 
         singleLine = true,
         shape = RoundedCornerShape(CornerRadiusLarge),
-        textStyle = MaterialTheme.typography.bodyLarge
+        textStyle = MaterialTheme.typography.bodyLarge,
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
     )
 }

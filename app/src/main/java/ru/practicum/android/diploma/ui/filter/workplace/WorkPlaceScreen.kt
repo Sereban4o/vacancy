@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.ui.workplace
+package ru.practicum.android.diploma.ui.filter.workplace
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.presentation.workplace.WorkPlaceViewModel
+import ru.practicum.android.diploma.presentation.filter.workplace.WorkPlaceViewModel
 import ru.practicum.android.diploma.ui.components.BackButton
 import ru.practicum.android.diploma.ui.components.Heading
 import ru.practicum.android.diploma.ui.components.PrimaryBottomButton

@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.ui.country
+package ru.practicum.android.diploma.ui.filter.country
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.presentation.country.CountryUiState
-import ru.practicum.android.diploma.presentation.country.CountryViewModel
+import ru.practicum.android.diploma.presentation.filter.country.CountryUiState
+import ru.practicum.android.diploma.presentation.filter.country.CountryViewModel
 import ru.practicum.android.diploma.ui.components.BackButton
 import ru.practicum.android.diploma.ui.components.FullscreenProgress
 import ru.practicum.android.diploma.ui.components.Heading
@@ -36,7 +36,6 @@ import ru.practicum.android.diploma.util.TypeState
 @Composable
 fun CountryScreen(
     onBack: () -> Unit,
-    onCountryChosen: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CountryViewModel = koinViewModel()
 ) {

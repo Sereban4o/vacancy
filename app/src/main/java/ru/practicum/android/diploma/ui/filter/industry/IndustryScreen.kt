@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.ui.industry
+package ru.practicum.android.diploma.ui.filter.industry
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.presentation.industry.IndustryUiState
-import ru.practicum.android.diploma.presentation.industry.IndustryViewModel
+import ru.practicum.android.diploma.presentation.filter.industry.IndustryUiState
+import ru.practicum.android.diploma.presentation.filter.industry.IndustryViewModel
 import ru.practicum.android.diploma.ui.components.BackButton
 import ru.practicum.android.diploma.ui.components.Heading
 import ru.practicum.android.diploma.ui.components.InfoState

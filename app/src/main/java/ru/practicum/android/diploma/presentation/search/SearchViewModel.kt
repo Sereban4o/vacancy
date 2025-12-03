@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.CombinedLoadStates
@@ -98,6 +99,9 @@ class SearchViewModel(
                                 // suspend-функция → вызываем внутри flow { }
                                 val filterSettings = filterSettingsInteractor.getFilterSettings()
                                 val searchFilters = filterSettings.toSearchFilters()
+
+                                Log.d("FILTER_CHAIN", "VM → filters = $searchFilters")
+
                                 emit(searchFilters)
                             }.flatMapLatest { filters ->
                                 searchVacanciesInteractor.searchPaged(

@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.presentation.industry
+package ru.practicum.android.diploma.presentation.filter.industry
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -109,7 +109,7 @@ class IndustryViewModel(
         _uiState.update {
             it.copy(
                 // кладём название выбранной отрасли в поле ввода
-                query = selected.name,
+                // query = selected.name, // опция показа клика в поле ввода
                 // сужаем список до одной выбранной отрасли
                 industries = listOf(selected),
                 // помечаем её как выбранную

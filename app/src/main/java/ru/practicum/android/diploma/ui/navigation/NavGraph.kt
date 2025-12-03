@@ -12,19 +12,21 @@ import ru.practicum.android.diploma.presentation.favorites.FavoritesViewModel
 import ru.practicum.android.diploma.presentation.vacancydetails.VacancyDetailsViewModel
 import ru.practicum.android.diploma.presentation.vacancydetails.VacancyDetailsViewModel.Companion.ARG_FROM_API
 import ru.practicum.android.diploma.presentation.vacancydetails.VacancyDetailsViewModel.Companion.ARG_VACANCY_ID
-import ru.practicum.android.diploma.ui.country.CountryScreen
-import ru.practicum.android.diploma.ui.main.MainScreen
-import ru.practicum.android.diploma.ui.team.TeamScreen
-import ru.practicum.android.diploma.ui.favorites.FavouritesScreen
-import ru.practicum.android.diploma.util.Routes
+import ru.practicum.android.diploma.ui.filter.country.CountryScreen
 import ru.practicum.android.diploma.ui.details.VacancyDetailsScreen
-import ru.practicum.android.diploma.ui.industry.IndustryScreen
-import ru.practicum.android.diploma.ui.workplace.WorkPlaceScreen
+import ru.practicum.android.diploma.ui.favorites.FavouritesScreen
+import ru.practicum.android.diploma.ui.filter.FilterSettingsScreen
+import ru.practicum.android.diploma.ui.filter.industry.IndustryScreen
+import ru.practicum.android.diploma.ui.main.MainScreen
+import ru.practicum.android.diploma.ui.filter.region.RegionScreen
+import ru.practicum.android.diploma.ui.team.TeamScreen
+import ru.practicum.android.diploma.ui.filter.workplace.WorkPlaceScreen
+import ru.practicum.android.diploma.util.Screen
 
 @Composable
 fun NavGraph(
-    modifier: Modifier,
-    startDestination: String = Routes.Main.name,
+    modifier: Modifier = Modifier,
+    startDestination: String = Screen.Main.route,
     navHostController: NavHostController
 ) {
     NavHost(
@@ -33,104 +35,243 @@ fun NavGraph(
         modifier = modifier
     ) {
         // 🟦 Главный экран
-        composable(Routes.Main.name) {
+        composable(Screen.Main.route) {
             MainScreen(
-//                onFilterClick = { /* откроем фильтры позже */ },
+                onFilterClick = { navHostController.navigate(Screen.Filter.route) },
 //                onFilterClick = {
-//                    // ⬇️ ВРЕМЕННО тест на экран отраслей
-//                    navHostController.navigate("industry")
+//                    // ⬇️ ВРЕМЕННО тест на экран место работы
+//                    navHostController.navigate(Screen.WorkPlace.route)
 //                },
-                onFilterClick = {
-                    // ⬇️ ВРЕМЕННО тест на экран место работыgt
-                    navHostController.navigate(Routes.WorkPlace.name)
-                },
                 onVacancyClick = { id ->
-                    // из поиска → fromApi = true (по умолчанию в VM)
-                    navHostController.navigateToVacancyDetails(
-                        vacancyId = id,
-                        fromApi = true
-                    )
+                    navHostController.navigateToVacancyDetails(id, true)
                 }
             )
         }
 
-        // 🔹 ЭКРАН ВЫБОРА страны
-        composable(Routes.Country.name) {
+        // Фильтр 🔹
+        composable(Screen.Filter.route) {
+            FilterSettingsScreen(
+                onBack = { navHostController.popBackStack() },
+                onWorkPlaceClick = {
+                    navHostController.navigate(Screen.WorkPlace.route)
+                },
+                onIndustryClick = {
+                    navHostController.navigate(Screen.Industry.route)
+                }
+            )
+        }
+
+        // Страна 🔹
+        composable(Screen.Country.route) {
             CountryScreen(
                 onBack = { navHostController.popBackStack() },
-                onCountryChosen = {
-                    // страна внутри CountryViewModel уже сохранена в FilterSettings
-                    // после этого показываем экран "Место работы", чтобы протестировать связку
-                    navHostController.navigate(Routes.WorkPlace.name)
-                }
             )
         }
 
-        // 🔹 ЭКРАН ВЫБОРА ОТРАСЛИ
-        composable("industry") {
+        // Регион 🔹
+        composable(Screen.Region.route) {
+            RegionScreen(
+                onBack = { navHostController.popBackStack() }
+            )
+        }
+
+        // Отрасли 🔹
+        composable(Screen.Industry.route) {
             IndustryScreen(
                 onBack = { navHostController.popBackStack() }
             )
         }
 
-        // 🔹 ЭКРАН Выбор места работы
-        composable("work_place") {
+        // Место работы 🔹
+        composable(Screen.WorkPlace.route) {
             WorkPlaceScreen(
                 onBack = { navHostController.popBackStack() },
                 onCountryClick = {
-                    navHostController.navigate(Routes.Country.name)
+                    navHostController.navigate(Screen.Country.route)
                 },
                 onRegionClick = {
-                    // NOTE: открыть экран выбора региона
-                    // navHostController.navigate("region")
+                    navHostController.navigate(Screen.Region.route)
                 }
             )
         }
 
         // ⭐ Избранное
-        composable(Routes.Favorites.name) {
+        composable(Screen.Favorites.route) {
             val vm: FavoritesViewModel = koinViewModel()
-
             FavouritesScreen(
-                modifier = Modifier,
                 viewModel = vm,
                 onVacancyClick = { id ->
-                    // из избранного → явно fromApi=false
-                    navHostController.navigateToVacancyDetails(
-                        vacancyId = id,
-                        fromApi = false
-                    )
+                    navHostController.navigateToVacancyDetails(id, false)
                 }
             )
         }
 
         // 👥 Команда
-        composable(Routes.Team.name) {
+        composable(Screen.Team.route) {
             TeamScreen()
         }
 
         // 📄 Детали вакансии
         composable(
-            // добавили query-параметр в route
-            route = "${Routes.VacancyDetails.name}/{$ARG_VACANCY_ID}?$ARG_FROM_API={$ARG_FROM_API}",
+            route = "${Screen.VacancyDetails.route}/{$ARG_VACANCY_ID}?$ARG_FROM_API={$ARG_FROM_API}",
             arguments = listOf(
-                navArgument(ARG_VACANCY_ID) {
-                    type = NavType.StringType
-                },
+                navArgument(ARG_VACANCY_ID) { type = NavType.StringType },
                 navArgument(ARG_FROM_API) {
                     type = NavType.BoolType
-                    defaultValue = true // по умолчанию считаем, что грузим из API
+                    defaultValue = true
                 }
             )
-        ) { _ ->
-
+        ) {
             val vm: VacancyDetailsViewModel = koinViewModel()
-
             VacancyDetailsScreen(
-                modifier = Modifier,
                 onBack = { navHostController.popBackStack() },
                 viewModel = vm
             )
         }
     }
 }
+
+
+//package ru.practicum.android.diploma.ui.navigation
+//
+//import androidx.compose.runtime.Composable
+//import androidx.compose.ui.Modifier
+//import androidx.navigation.NavHostController
+//import androidx.navigation.NavType
+//import androidx.navigation.compose.NavHost
+//import androidx.navigation.compose.composable
+//import androidx.navigation.navArgument
+//import org.koin.androidx.compose.koinViewModel
+//import ru.practicum.android.diploma.presentation.favorites.FavoritesViewModel
+//import ru.practicum.android.diploma.presentation.vacancydetails.VacancyDetailsViewModel
+//import ru.practicum.android.diploma.presentation.vacancydetails.VacancyDetailsViewModel.Companion.ARG_FROM_API
+//import ru.practicum.android.diploma.presentation.vacancydetails.VacancyDetailsViewModel.Companion.ARG_VACANCY_ID
+//import ru.practicum.android.diploma.ui.country.CountryScreen
+//import ru.practicum.android.diploma.ui.main.MainScreen
+//import ru.practicum.android.diploma.ui.team.TeamScreen
+//import ru.practicum.android.diploma.ui.favorites.FavouritesScreen
+//import ru.practicum.android.diploma.util.Routes
+//import ru.practicum.android.diploma.ui.details.VacancyDetailsScreen
+//import ru.practicum.android.diploma.ui.industry.IndustryScreen
+//import ru.practicum.android.diploma.ui.region.RegionScreen
+//import ru.practicum.android.diploma.ui.workplace.WorkPlaceScreen
+//
+//@Composable
+//fun NavGraph(
+//    modifier: Modifier,
+//    startDestination: String = Routes.Main.name,
+//    navHostController: NavHostController
+//) {
+//    NavHost(
+//        navController = navHostController,
+//        startDestination = startDestination,
+//        modifier = modifier
+//    ) {
+//        // 🟦 Главный экран
+//        composable(Routes.Main.name) {
+//            MainScreen(
+////                onFilterClick = { /* откроем фильтры позже */ },
+////                onFilterClick = {
+////                    // ⬇️ ВРЕМЕННО тест на экран отраслей
+////                    navHostController.navigate("industry")
+////                },
+//                onFilterClick = {
+//                    // ⬇️ ВРЕМЕННО тест на экран место работыgt
+//                    navHostController.navigate(Routes.WorkPlace.name)
+//                },
+//                onVacancyClick = { id ->
+//                    // из поиска → fromApi = true (по умолчанию в VM)
+//                    navHostController.navigateToVacancyDetails(
+//                        vacancyId = id,
+//                        fromApi = true
+//                    )
+//                }
+//            )
+//        }
+//
+//        // 🔹 экран выбора региона
+//        composable(Routes.Region.name) {
+//            RegionScreen(
+//                onBack = { navHostController.popBackStack() }
+//            )
+//        }
+//
+//        // 🔹 ЭКРАН ВЫБОРА страны
+//        composable(Routes.Country.name) {
+//            CountryScreen(
+//                onBack = { navHostController.popBackStack() },
+//                onCountryChosen = {
+//                    // страна внутри CountryViewModel уже сохранена в FilterSettings
+//                    // после этого показываем экран "Место работы", чтобы протестировать связку
+//                    navHostController.navigate(Routes.WorkPlace.name)
+//                }
+//            )
+//        }
+//
+//        // 🔹 ЭКРАН ВЫБОРА ОТРАСЛИ
+//        composable("industry") {
+//            IndustryScreen(
+//                onBack = { navHostController.popBackStack() }
+//            )
+//        }
+//
+//        // 🔹 ЭКРАН Выбор места работы
+//        composable(Routes.WorkPlace.name) {
+//            WorkPlaceScreen(
+//                onBack = { navHostController.popBackStack() },
+//                onCountryClick = {
+//                    navHostController.navigate(Routes.Country.name)
+//                },
+//                onRegionClick = {
+//                    navHostController.navigate(Routes.Region.name)
+//                }
+//            )
+//        }
+//
+//        // ⭐ Избранное
+//        composable(Routes.Favorites.name) {
+//            val vm: FavoritesViewModel = koinViewModel()
+//
+//            FavouritesScreen(
+//                modifier = Modifier,
+//                viewModel = vm,
+//                onVacancyClick = { id ->
+//                    // из избранного → явно fromApi=false
+//                    navHostController.navigateToVacancyDetails(
+//                        vacancyId = id,
+//                        fromApi = false
+//                    )
+//                }
+//            )
+//        }
+//
+//        // 👥 Команда
+//        composable(Routes.Team.name) {
+//            TeamScreen()
+//        }
+//
+//        // 📄 Детали вакансии
+//        composable(
+//            // добавили query-параметр в route
+//            route = "${Routes.VacancyDetails.name}/{$ARG_VACANCY_ID}?$ARG_FROM_API={$ARG_FROM_API}",
+//            arguments = listOf(
+//                navArgument(ARG_VACANCY_ID) {
+//                    type = NavType.StringType
+//                },
+//                navArgument(ARG_FROM_API) {
+//                    type = NavType.BoolType
+//                    defaultValue = true // по умолчанию считаем, что грузим из API
+//                }
+//            )
+//        ) { _ ->
+//
+//            val vm: VacancyDetailsViewModel = koinViewModel()
+//
+//            VacancyDetailsScreen(
+//                modifier = Modifier,
+//                onBack = { navHostController.popBackStack() },
+//                viewModel = vm
+//            )
+//        }
+//    }
+//}
