@@ -28,10 +28,10 @@ private fun formatNumber(value: Int): String {
  */
 private fun mapCurrencyCodeToDisplay(code: String?): String {
     return when (code) {
-        "RUR", "RUB" -> "₽"         // можешь заменить на "руб."
+        "RUR", "RUB" -> "₽" // можешь заменить на "руб."
         "USD" -> "$"
         "EUR" -> "€"
-        else -> code.orEmpty()      // на всякий случай, если прилетит что-то ещё
+        else -> code.orEmpty() // на всякий случай, если прилетит что-то ещё
     }
 }
 
