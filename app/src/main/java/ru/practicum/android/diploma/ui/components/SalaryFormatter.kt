@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.ui.components
 import android.annotation.SuppressLint
 import ru.practicum.android.diploma.domain.models.Vacancy
 import java.text.NumberFormat
+import java.util.Currency
 import java.util.Locale
 
 // Форматтер чисел с разделением на разряды.
@@ -21,17 +22,32 @@ private fun formatNumber(value: Int): String {
 /**
  * Маппинг кода валюты из API в человекочитаемое отображение для UI.
  *
- * Примеры:
- *  - "RUR" / "RUB" -> "₽" (или "руб." — если так в ТЗ)
+ * Особые случаи:
+ *  - "RUR" / "RUB" -> "₽"
+ *
+ * Остальные валюты берём из java.util.Currency:
  *  - "USD" -> "$"
  *  - "EUR" -> "€"
+ *  - "GBP" -> "£"
+ *  - "HKD" -> "HK$"
+ *  - "SEK" -> "kr"
+ *  и т.д.
  */
 private fun mapCurrencyCodeToDisplay(code: String?): String {
+    if (code.isNullOrBlank()) return ""
+
     return when (code) {
-        "RUR", "RUB" -> "₽" // можешь заменить на "руб."
-        "USD" -> "$"
-        "EUR" -> "€"
-        else -> code.orEmpty() // на всякий случай, если прилетит что-то ещё
+        "RUR", "RUB" -> "₽" // можно заменить на "руб." если так в ТЗ
+        else -> {
+            try {
+                val currency = Currency.getInstance(code)
+                // символ валюты с учётом русской локали
+                currency.getSymbol(Locale("ru", "RU"))
+            } catch (e: IllegalArgumentException) {
+                // если код какой-то нестандартный — показываем как есть
+                code
+            }
+        }
     }
 }
 
@@ -39,7 +55,7 @@ private fun mapCurrencyCodeToDisplay(code: String?): String {
  * Форматирование зарплаты по правилам ТЗ:
  * - "от XX", "до XX", "от XX до XX"
  * - "зарплата не указана", если нет значений
- * - валюта отображается всегда
+ * - валюта отображается всегда (если пришёл код)
  * - числа с разбиением на разряды
  */
 fun formatSalary(
