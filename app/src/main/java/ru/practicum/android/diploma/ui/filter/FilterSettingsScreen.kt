@@ -35,7 +35,6 @@ fun FilterSettingsScreen(
     viewModel: FilterViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val scope = rememberCoroutineScope()
 
     // перечитываем сохранённые FilterSettings
     // когда экран попадает в composition (в т.ч. после возврата с WorkPlace / Industry)

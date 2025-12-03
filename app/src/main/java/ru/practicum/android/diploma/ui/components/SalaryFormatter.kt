@@ -19,36 +19,32 @@ private fun formatNumber(value: Int): String {
     return salaryNumberFormat.format(value).replace('\u00A0', ' ')
 }
 
+// Все валюты из стандартной библиотеки: код -> Currency
+// Без try/catch, чисто программно.
+private val availableCurrencies: Map<String, Currency> =
+    Currency.getAvailableCurrencies().associateBy { it.currencyCode.uppercase(Locale.ROOT) }
+
 /**
  * Маппинг кода валюты из API в человекочитаемое отображение для UI.
  *
- * Особые случаи:
- *  - "RUR" / "RUB" -> "₽"
- *
- * Остальные валюты берём из java.util.Currency:
- *  - "USD" -> "$"
- *  - "EUR" -> "€"
- *  - "GBP" -> "£"
- *  - "HKD" -> "HK$"
- *  - "SEK" -> "kr"
- *  и т.д.
+ * - Для "RUR" делаем спец-кейс → "₽"
+ * - Для остальных кодов:
+ *      * если это валидный ISO-код, берём Currency и его symbol
+ *      * если нет — показываем код как есть
  */
 private fun mapCurrencyCodeToDisplay(code: String?): String {
     if (code.isNullOrBlank()) return ""
 
-    return when (code) {
-        "RUR", "RUB" -> "₽" // можно заменить на "руб." если так в ТЗ
-        else -> {
-            try {
-                val currency = Currency.getInstance(code)
-                // символ валюты с учётом русской локали
-                currency.getSymbol(Locale("ru", "RU"))
-            } catch (e: IllegalArgumentException) {
-                // если код какой-то нестандартный — показываем как есть
-                code
-            }
-        }
+    val upperCode = code.uppercase(Locale.ROOT)
+
+    // Спец-кейс для рублей из ТЗ/бэка
+    if (upperCode == "RUR" || upperCode == "RUB") {
+        return "₽"
     }
+
+    val currency = availableCurrencies[upperCode] ?: return code
+    // символ по локали устройства (без устаревших конструкторов Locale)
+    return currency.symbol
 }
 
 /**
