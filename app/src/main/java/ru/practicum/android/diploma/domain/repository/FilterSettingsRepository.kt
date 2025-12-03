@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.domain.repository
 
-import kotlinx.coroutines.flow.StateFlow
 import ru.practicum.android.diploma.domain.models.FilterSettings
 
 interface FilterSettingsRepository {

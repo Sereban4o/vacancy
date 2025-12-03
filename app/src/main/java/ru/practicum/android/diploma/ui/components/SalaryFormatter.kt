@@ -19,6 +19,23 @@ private fun formatNumber(value: Int): String {
 }
 
 /**
+ * Маппинг кода валюты из API в человекочитаемое отображение для UI.
+ *
+ * Примеры:
+ *  - "RUR" / "RUB" -> "₽" (или "руб." — если так в ТЗ)
+ *  - "USD" -> "$"
+ *  - "EUR" -> "€"
+ */
+private fun mapCurrencyCodeToDisplay(code: String?): String {
+    return when (code) {
+        "RUR", "RUB" -> "₽"         // можешь заменить на "руб."
+        "USD" -> "$"
+        "EUR" -> "€"
+        else -> code.orEmpty()      // на всякий случай, если прилетит что-то ещё
+    }
+}
+
+/**
  * Форматирование зарплаты по правилам ТЗ:
  * - "от XX", "до XX", "от XX до XX"
  * - "зарплата не указана", если нет значений
@@ -30,8 +47,7 @@ fun formatSalary(
     salaryTo: Int?,
     currencyCode: String?
 ): String {
-    val currency = currencyCode ?: ""
-    // по ТЗ валюта "должна отображаться всегда", но если в API null — выводим пустую строку
+    val currency = mapCurrencyCodeToDisplay(currencyCode)
 
     val fromStr = salaryFrom?.let { formatNumber(it) }
     val toStr = salaryTo?.let { formatNumber(it) }
@@ -40,7 +56,7 @@ fun formatSalary(
         fromStr != null && toStr != null -> "от $fromStr до $toStr $currency"
         fromStr != null -> "от $fromStr $currency"
         toStr != null -> "до $toStr $currency"
-        else -> "зарплаты не указана"
+        else -> "зарплата не указана"
     }
 }
 
