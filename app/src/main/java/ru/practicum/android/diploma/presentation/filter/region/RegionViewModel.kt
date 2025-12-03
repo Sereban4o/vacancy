@@ -32,49 +32,56 @@ class RegionViewModel(
 
     private fun loadRegions() {
         viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    isLoading = true,
-                    isError = false,
-                    isEmptySearchResult = false
-                )
-            }
+            startLoading()
 
             try {
-                // 1. читаем текущие настройки — чтобы понять, есть ли уже страна
-                val settings: FilterSettings = filterSettingsInteractor.getFilterSettings()
-                val currentCountryId = settings.country?.id
-
-                // 2. грузим регионы (с учётом страны или без)
-                fullList = regionsInteractor.getRegionsForCountry(currentCountryId)
-
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        isError = false,
-                        regions = fullList,
-                        isEmptySearchResult = false
-                    )
-                }
+                val regions = fetchRegionsForCurrentFilter()
+                onRegionsLoaded(regions)
             } catch (e: IOException) {
                 Log.w(TAG, "Network error while loading regions", e)
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        isError = true,
-                        isEmptySearchResult = false
-                    )
-                }
+                onRegionsLoadError()
             } catch (e: HttpException) {
                 Log.e(TAG, "HTTP error while loading regions: ${e.code()}", e)
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        isError = true,
-                        isEmptySearchResult = false
-                    )
-                }
+                onRegionsLoadError()
             }
+        }
+    }
+
+    private fun startLoading() {
+        _uiState.update {
+            it.copy(
+                isLoading = true,
+                isError = false,
+                isEmptySearchResult = false
+            )
+        }
+    }
+
+    private suspend fun fetchRegionsForCurrentFilter(): List<FilterParameter> {
+        val settings: FilterSettings = filterSettingsInteractor.getFilterSettings()
+        val currentCountryId = settings.country?.id
+        return regionsInteractor.getRegionsForCountry(currentCountryId)
+    }
+
+    private fun onRegionsLoaded(regions: List<FilterParameter>) {
+        fullList = regions
+        _uiState.update {
+            it.copy(
+                isLoading = false,
+                isError = false,
+                regions = fullList,
+                isEmptySearchResult = false
+            )
+        }
+    }
+
+    private fun onRegionsLoadError() {
+        _uiState.update {
+            it.copy(
+                isLoading = false,
+                isError = true,
+                isEmptySearchResult = false
+            )
         }
     }
 
@@ -106,13 +113,6 @@ class RegionViewModel(
         }
     }
 
-    /**
-     * Пользователь нажал на регион.
-     *
-     * 1) Если страна уже выбрана — просто сохраняем регион.
-     * 2) Если страны ещё нет — спрашиваем у интерактора, к какой стране
-     *    относится этот регион, и сохраняем и страну, и регион.
-     */
     suspend fun selectRegion(regionId: String): Boolean {
         val selected = fullList.firstOrNull { it.id == regionId } ?: return false
 
@@ -121,7 +121,6 @@ class RegionViewModel(
         val country: FilterParameter? = if (current.country != null) {
             current.country
         } else {
-            // авто-определение страны по региону
             regionsInteractor.getCountryForRegion(regionId)
         }
 

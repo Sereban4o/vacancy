@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -39,20 +40,7 @@ fun ExpectedSalaryField(
     onClear: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val isDark = isSystemInDarkTheme()
-
-    val fieldBackground = if (isDark) {
-        SearchFieldBackgroundDark // ночь: #AEAFB4
-    } else {
-        SearchFieldBackgroundLight // день: #E6E8EB
-    }
-
-    val placeholderColor = if (isDark) {
-        TextColorDark // ночь: белый
-    } else {
-        SearchFieldBackgroundDark // день: #AEAFB4
-    }
-
+    val (fieldBackground, placeholderColor) = rememberSalaryFieldColors()
     var isFocused by remember { mutableStateOf(false) }
 
     Box(
@@ -69,57 +57,109 @@ fun ExpectedSalaryField(
         BasicTextField(
             value = value,
             onValueChange = { new ->
-                if (new.all { it.isDigit() }) onValueChange(new)
+                if (new.all { it.isDigit() }) {
+                    onValueChange(new)
+                }
             },
             singleLine = true,
             textStyle = MaterialTheme.typography.bodyMedium.copy(
                 color = SearchFieldTextColor
             ),
-            cursorBrush = SolidColor(MaterialTheme.colorScheme.tertiary), // синий курсор
+            cursorBrush = SolidColor(MaterialTheme.colorScheme.tertiary),
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusChanged { state -> isFocused = state.isFocused },
             decorationBox = { innerTextField ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        // верхняя строка — заголовок
-                        Text(
-                            text = stringResource(R.string.expected_salary),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = if (isFocused || value.isNotEmpty())
-                                PrimaryLight
-                            else
-                                placeholderColor
-                        )
-
-                        // плейсхолдер + текстовое поле в одной области
-                        Box(modifier = Modifier.fillMaxWidth()) {
-                            if (value.isEmpty()) {
-                                Text(
-                                    text = stringResource(R.string.salary_hint),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = placeholderColor
-                                )
-                            }
-                            innerTextField() // гарантированная ширина → курсор виден при фокусе
-                        }
-                    }
-
-                    if (value.isNotEmpty()) {
-                        Spacer(Modifier.height(0.dp))
-                        ActionIcon(
-                            iconRes = R.drawable.ic_clear_24,
-                            onClick = onClear,
-                            tint = SearchFieldTextColor
-                        )
-                    }
-                }
+                SalaryFieldContent(
+                    value = value,
+                    isFocused = isFocused,
+                    placeholderColor = placeholderColor,
+                    onClear = onClear,
+                    innerTextField = innerTextField
+                )
             }
         )
     }
+}
+
+@Composable
+private fun rememberSalaryFieldColors(): Pair<Color, Color> {
+    val isDark = isSystemInDarkTheme()
+
+    val fieldBackground = if (isDark) {
+        SearchFieldBackgroundDark // ночь: #AEAFB4
+    } else {
+        SearchFieldBackgroundLight // день: #E6E8EB
+    }
+
+    val placeholderColor = if (isDark) {
+        TextColorDark // ночь: белый
+    } else {
+        SearchFieldBackgroundDark // день: #AEAFB4
+    }
+
+    return fieldBackground to placeholderColor
+}
+
+@Composable
+private fun SalaryFieldContent(
+    value: String,
+    isFocused: Boolean,
+    placeholderColor: Color,
+    onClear: () -> Unit,
+    innerTextField: @Composable () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            SalaryTitle(
+                isFocused = isFocused,
+                hasValue = value.isNotEmpty(),
+                placeholderColor = placeholderColor
+            )
+
+            Box(modifier = Modifier.fillMaxWidth()) {
+                if (value.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.salary_hint),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = placeholderColor
+                    )
+                }
+                innerTextField()
+            }
+        }
+
+        if (value.isNotEmpty()) {
+            Spacer(Modifier.height(0.dp))
+            ActionIcon(
+                iconRes = R.drawable.ic_clear_24,
+                onClick = onClear,
+                tint = SearchFieldTextColor
+            )
+        }
+    }
+}
+
+@Composable
+private fun SalaryTitle(
+    isFocused: Boolean,
+    hasValue: Boolean,
+    placeholderColor: Color
+) {
+    val color = if (isFocused || hasValue) {
+        PrimaryLight
+    } else {
+        placeholderColor
+    }
+
+    Text(
+        text = stringResource(R.string.expected_salary),
+        style = MaterialTheme.typography.labelSmall,
+        color = color
+    )
 }
