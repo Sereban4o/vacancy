@@ -81,6 +81,7 @@ fun FilterSettingsScreen(
                     value = uiState.salaryText,
                     onValueChange = viewModel::onSalaryChanged,
                     onClear = viewModel::clearSalary,
+                    isWithSalaryOnly = uiState.withSalaryOnly,
                     modifier = Modifier.fillMaxWidth()
                 )
 

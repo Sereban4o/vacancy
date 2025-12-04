@@ -41,6 +41,7 @@ fun ExpectedSalaryField(
     value: String,
     onValueChange: (String) -> Unit,
     onClear: () -> Unit,
+    isWithSalaryOnly: Boolean,
     modifier: Modifier = Modifier
 ) {
     val (fieldBackground, placeholderColor) = rememberSalaryFieldColors()
@@ -80,6 +81,7 @@ fun ExpectedSalaryField(
                     isFocused = isFocused,
                     placeholderColor = placeholderColor,
                     onClear = onClear,
+                    isWithSalaryOnly = isWithSalaryOnly,
                     innerTextField = innerTextField
                 )
             }
@@ -112,6 +114,7 @@ private fun SalaryFieldContent(
     isFocused: Boolean,
     placeholderColor: Color,
     onClear: () -> Unit,
+    isWithSalaryOnly: Boolean,
     innerTextField: @Composable () -> Unit
 ) {
     Row(
@@ -126,7 +129,8 @@ private fun SalaryFieldContent(
             SalaryTitle(
                 isFocused = isFocused,
                 hasValue = value.isNotEmpty(),
-                placeholderColor = placeholderColor
+                placeholderColor = placeholderColor,
+                isWithSalaryOnly = isWithSalaryOnly
             )
 
             Box(modifier = Modifier.fillMaxWidth()) {
@@ -156,12 +160,21 @@ private fun SalaryFieldContent(
 private fun SalaryTitle(
     isFocused: Boolean,
     hasValue: Boolean,
-    placeholderColor: Color
+    placeholderColor: Color,
+    isWithSalaryOnly: Boolean
 ) {
-    val color = if (isFocused || hasValue) {
-        PrimaryLight
-    } else {
-        placeholderColor
+    val color = when {
+        isWithSalaryOnly -> {
+            // 🔥 чекбокс включен → всегда чёрный (#1A1B22)
+            SearchFieldTextColor
+        }
+        isFocused || hasValue -> {
+            // обычное поведение → синий при фокусе / наличии значения
+            PrimaryLight
+        }
+        else -> {
+            placeholderColor
+        }
     }
 
     Text(
