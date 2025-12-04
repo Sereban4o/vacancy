@@ -43,9 +43,15 @@ fun WorkPlaceRow(
                 MaterialTheme.colorScheme.onBackground
             }
 
+            val labelStyle = if (value == null) {
+                MaterialTheme.typography.bodyMedium  // 16sp
+            } else {
+                MaterialTheme.typography.labelSmall  // 12sp
+            }
+
             Text(
                 text = stringResource(id = titleRes),
-                style = MaterialTheme.typography.bodyMedium,
+                style = labelStyle,
                 color = labelColor
             )
 

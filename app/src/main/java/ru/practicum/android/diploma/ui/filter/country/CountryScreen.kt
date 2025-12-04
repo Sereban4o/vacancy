@@ -51,38 +51,53 @@ fun CountryScreen(
             )
         },
         content = {
-            when {
-                uiState.isLoading -> {
-                    FullscreenProgress()
-                }
-
-                uiState.isError -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        if (uiState.isNetworkError) {
-                            InfoState(TypeState.NoInternet)
-                        } else {
-                            InfoState(TypeState.ServerError)
+            if (uiState.isLoading) {
+                // Лоадер — единственный фуллскрин-состояние
+                FullscreenProgress()
+            } else {
+                CountryContent(
+                    uiState = uiState,
+                    onCountryClick = { id ->
+                        coroutineScope.launch {
+                            val ok = viewModel.selectCountry(id)
+                            if (ok) onBack()
                         }
                     }
-                }
-
-                else -> {
-                    CountryList(
-                        uiState = uiState,
-                        onCountryClick = { id ->
-                            coroutineScope.launch {
-                                val ok = viewModel.selectCountry(id)
-                                if (ok) onBack()
-                            }
-                        }
-                    )
-                }
+                )
             }
         }
     )
+}
+
+@Composable
+private fun CountryContent(
+    uiState: CountryUiState,
+    onCountryClick: (String) -> Unit
+) {
+    // Всё, что ниже аппбара, занимаем этим Box
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        when {
+            uiState.isError -> {
+                // Показываем заглушку вместо списка
+                if (uiState.isNetworkError) {
+                    InfoState(TypeState.NoInternet)
+                } else {
+                    InfoState(TypeState.ServerError)
+                }
+            }
+
+            else -> {
+                // Обычный список стран
+                CountryList(
+                    uiState = uiState,
+                    onCountryClick = onCountryClick
+                )
+            }
+        }
+    }
 }
 
 @Composable

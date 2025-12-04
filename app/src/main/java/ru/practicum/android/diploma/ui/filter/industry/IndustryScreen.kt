@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,11 +20,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -47,6 +54,9 @@ fun IndustryScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
+
+    var bottomPaddingDp by remember { mutableStateOf(0.dp) }
+    val density = LocalDensity.current
 
     ScreenScaffold(
         modifier = modifier,
@@ -80,7 +90,8 @@ fun IndustryScreen(
                     IndustryContent(
                         uiState = uiState,
                         onQueryChanged = viewModel::onQueryChanged,
-                        onIndustryClick = { id -> viewModel.onIndustryClick(id) }
+                        onIndustryClick = { id -> viewModel.onIndustryClick(id) },
+                        bottomPadding = bottomPaddingDp
                     )
                 }
             }
@@ -93,6 +104,10 @@ fun IndustryScreen(
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
                         .padding(bottom = 24.dp)
+                        .onGloballyPositioned { coords ->
+                            val heightPx = coords.size.height
+                            bottomPaddingDp = with(density) { heightPx.toDp() + 24.dp }
+                        }
                 ) {
                     PrimaryBottomButton(
                         textRes = R.string.choose,
@@ -105,6 +120,8 @@ fun IndustryScreen(
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
+            }else {
+                bottomPaddingDp = 0.dp
             }
         }
     )
@@ -114,11 +131,11 @@ fun IndustryScreen(
 private fun IndustryContent(
     uiState: IndustryUiState,
     onQueryChanged: (String) -> Unit,
-    onIndustryClick: (String) -> Unit
+    onIndustryClick: (String) -> Unit,
+    bottomPadding: Dp
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         // 🔍 поле поиска отрасли
         SearchInputField(
@@ -135,7 +152,10 @@ private fun IndustryContent(
             InfoState(TypeState.NoIndustry)
         } else {
             // 📋 список отраслей (полный или отфильтрованный)
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = bottomPadding)
+            ) {
                 items(
                     items = uiState.industries,
                     key = { it.id }

@@ -89,24 +89,26 @@ class RegionViewModel(
         viewModelScope.launch {
             val trimmed = newQuery.trim()
 
-            if (trimmed.isEmpty()) {
-                _uiState.update {
-                    it.copy(
+            _uiState.update { state ->
+                if (trimmed.isEmpty()) {
+                    // Пустой запрос → показываем полный список, без "Такого региона нет"
+                    state.copy(
                         query = "",
                         regions = fullList,
                         isEmptySearchResult = false
                     )
-                }
-            } else {
-                val filtered = fullList.filter { region ->
-                    region.name.contains(trimmed, ignoreCase = true)
-                }
+                } else {
+                    val filtered = fullList.filter { region ->
+                        region.name.contains(trimmed, ignoreCase = true)
+                    }
 
-                _uiState.update {
-                    it.copy(
+                    state.copy(
                         query = trimmed,
                         regions = filtered,
-                        isEmptySearchResult = filtered.isEmpty()
+                        // ВАЖНО: пустой результат показываем только если НЕТ ошибки
+                        isEmptySearchResult = trimmed.isNotBlank()
+                            && filtered.isEmpty()
+                            && !state.isError
                     )
                 }
             }

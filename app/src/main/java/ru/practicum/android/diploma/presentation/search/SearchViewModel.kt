@@ -139,11 +139,28 @@ class SearchViewModel(
      */
     fun onQueryChanged(newQuery: String) {
         _uiState.update { current ->
-            current.copy(
-                query = newQuery,
-                isInitial = false,
-            )
+            if (newQuery.isBlank()) {
+                // пользователь стёр запрос — показываем начальное "бинокль" состояние
+                current.copy(
+                    query = newQuery,
+                    isInitial = true,
+                    isLoading = false,
+                    errorType = SearchErrorType.NONE,
+                    totalFound = 0
+                )
+            } else {
+                // пользователь вводит текст — сразу считаем, что идёт поиск
+                current.copy(
+                    query = newQuery,
+                    isInitial = false,
+                    isLoading = true,
+                    errorType = SearchErrorType.NONE,
+                    totalFound = 0
+                )
+            }
         }
+
+        // запускаем debounce-цепочку
         searchQueryFlow.value = newQuery
     }
 

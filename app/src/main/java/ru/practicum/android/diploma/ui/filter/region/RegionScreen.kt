@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -56,27 +57,6 @@ fun RegionScreen(
                 uiState.isLoading -> {
                     FullscreenProgress()
                 }
-
-                uiState.isError -> {
-                    // справа на макете — "Не удалось получить список"
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        InfoState(TypeState.NoDataRegion)
-                    }
-                }
-
-                uiState.isEmptySearchResult -> {
-                    // средний экран макета — "Такого региона нет"
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        InfoState(TypeState.NoRegion)
-                    }
-                }
-
                 else -> {
                     RegionContent(
                         uiState = uiState,
@@ -113,15 +93,38 @@ private fun RegionContent(
 
         Spacer(Modifier.height(12.dp))
 
-        LazyColumn {
-            items(
-                items = uiState.regions,
-                key = { it.id }
-            ) { region ->
-                RegionRow(
-                    name = region.name,
-                    onClick = { onRegionClick(region.id) }
-                )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            contentAlignment = Alignment.Center
+        ) {
+            when {
+                uiState.isEmptySearchResult -> {
+                    // "Такого региона нет"
+                    InfoState(TypeState.NoRegion)
+                }
+
+                uiState.isError -> {
+                    // "Не удалось получить список"
+                    InfoState(TypeState.NoDataRegion)
+                }
+
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(
+                            items = uiState.regions,
+                            key = { it.id }
+                        ) { region ->
+                            RegionRow(
+                                name = region.name,
+                                onClick = { onRegionClick(region.id) }
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -134,7 +137,7 @@ private fun RegionRow(
 ) {
     androidx.compose.foundation.layout.Row(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .height(48.dp)
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp),

@@ -14,7 +14,11 @@ class FilterSettingsRepositoryImpl(
 
     override suspend fun getFilterSettings(): FilterSettings =
         withContext(Dispatchers.IO) {
-            _settingsFlow.value
+            // 🔹 читаем сохранённые настройки из SharedPreferences
+            val stored: FilterSettings? = dataSource.readFilterSettings()
+            val result = stored ?: FilterSettings() // если ничего нет — дефолт
+            _settingsFlow.value = result // обновляем in-memory кэш
+            result
         }
 
     override suspend fun saveFilterSettings(settings: FilterSettings) =
