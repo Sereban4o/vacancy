@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.domain.models.Vacancy
 
@@ -93,5 +94,25 @@ fun VacancyItem(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun VacancyItemPreview() {
+    MaterialTheme {
+        VacancyItem(
+            vacancy = Vacancy(
+                id = "1",
+                title = "Android-разработчик",
+                company = "ООО Ромашка",
+                city = "Москва",
+                salaryFrom = 150000,
+                salaryTo = 250000,
+                currency = "RUR",
+                logoUrl = null
+            ),
+            onClick = {}
+        )
     }
 }
