@@ -107,8 +107,8 @@ private fun VacancyItemPreview() {
                 title = "Android-разработчик",
                 company = "ООО Ромашка",
                 city = "Москва",
-                salaryFrom = 150000,
-                salaryTo = 250000,
+                salaryFrom = 150_000,
+                salaryTo = 250_000,
                 currency = "RUR",
                 logoUrl = null
             ),
